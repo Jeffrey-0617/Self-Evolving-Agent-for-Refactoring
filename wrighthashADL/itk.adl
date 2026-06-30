@@ -1,0 +1,340 @@
+connector CSConnector {
+  role requester(j) = process -> req!j -> res?j -> Skip;
+  role responder() = req?j -> invoke -> process -> res!j -> responder();
+}
+
+component GroupBridge {
+  port brg_call_cmp() = brg_cmp_req -> brg_call_cmp();
+  port brg_call_cor() = brg_cor_req -> brg_call_cor();
+  port brg_call_flt() = brg_flt_req -> brg_call_flt();
+  port brg_call_iox() = brg_iox_req -> brg_call_iox();
+  port brg_call_non() = brg_non_req -> brg_call_non();
+  port brg_call_nbr() = brg_nbr_req -> brg_call_nbr();
+  port brg_call_rem() = brg_rem_req -> brg_call_rem();
+  port brg_call_seg() = brg_seg_req -> brg_call_seg();
+  port brg_call_tpx() = brg_tpx_req -> brg_call_tpx();
+  port brg_call_vid() = brg_vid_req -> brg_call_vid();
+  port brg_srv_reg() = brg_reg_resp -> brg_srv_reg();
+  port brg_srv_rem() = brg_rem_resp -> brg_srv_rem();
+  port brg_srv_seg() = brg_seg_resp -> brg_srv_seg();
+  port brg_srv_vid() = brg_vid_resp -> brg_srv_vid();
+}
+
+component GroupCompatibility {
+  port cmp_call_cor() = cmp_cor_req -> cmp_call_cor();
+  port cmp_call_iox() = cmp_iox_req -> cmp_call_iox();
+  port cmp_call_non() = cmp_non_req -> cmp_call_non();
+  port cmp_call_tpx() = cmp_tpx_req -> cmp_call_tpx();
+  port cmp_srv_brg() = cmp_brg_resp -> cmp_srv_brg();
+  port cmp_srv_nbr() = cmp_nbr_resp -> cmp_srv_nbr();
+  port cmp_srv_seg() = cmp_seg_resp -> cmp_srv_seg();
+}
+
+component GroupCore {
+  port cor_call_non() = cor_non_req -> cor_call_non();
+  port cor_call_tpx() = cor_tpx_req -> cor_call_tpx();
+  port cor_srv_brg() = cor_brg_resp -> cor_srv_brg();
+  port cor_srv_cmp() = cor_cmp_resp -> cor_srv_cmp();
+  port cor_srv_flt() = cor_flt_resp -> cor_srv_flt();
+  port cor_srv_iox() = cor_iox_resp -> cor_srv_iox();
+  port cor_srv_non() = cor_non_resp -> cor_srv_non();
+  port cor_srv_nbr() = cor_nbr_resp -> cor_srv_nbr();
+  port cor_srv_num() = cor_num_resp -> cor_srv_num();
+  port cor_srv_reg() = cor_reg_resp -> cor_srv_reg();
+  port cor_srv_rem() = cor_rem_resp -> cor_srv_rem();
+  port cor_srv_seg() = cor_seg_resp -> cor_srv_seg();
+  port cor_srv_vid() = cor_vid_resp -> cor_srv_vid();
+}
+
+component GroupFiltering {
+  port flt_call_cor() = flt_cor_req -> flt_call_cor();
+  port flt_call_iox() = flt_iox_req -> flt_call_iox();
+  port flt_call_non() = flt_non_req -> flt_call_non();
+  port flt_call_tpx() = flt_tpx_req -> flt_call_tpx();
+  port flt_srv_brg() = flt_brg_resp -> flt_srv_brg();
+  port flt_srv_reg() = flt_reg_resp -> flt_srv_reg();
+  port flt_srv_rem() = flt_rem_resp -> flt_srv_rem();
+  port flt_srv_seg() = flt_seg_resp -> flt_srv_seg();
+  port flt_srv_vid() = flt_vid_resp -> flt_srv_vid();
+}
+
+component GroupIO {
+  port iox_call_cor() = iox_cor_req -> iox_call_cor();
+  port iox_call_non() = iox_non_req -> iox_call_non();
+  port iox_call_tpx() = iox_tpx_req -> iox_call_tpx();
+  port iox_srv_brg() = iox_brg_resp -> iox_srv_brg();
+  port iox_srv_cmp() = iox_cmp_resp -> iox_srv_cmp();
+  port iox_srv_flt() = iox_flt_resp -> iox_srv_flt();
+  port iox_srv_reg() = iox_reg_resp -> iox_srv_reg();
+  port iox_srv_rem() = iox_rem_resp -> iox_srv_rem();
+  port iox_srv_vid() = iox_vid_resp -> iox_srv_vid();
+}
+
+component GroupNonunit {
+  port non_call_cor() = non_cor_req -> non_call_cor();
+  port non_call_tpx() = non_tpx_req -> non_call_tpx();
+  port non_srv_brg() = non_brg_resp -> non_srv_brg();
+  port non_srv_cmp() = non_cmp_resp -> non_srv_cmp();
+  port non_srv_cor() = non_cor_resp -> non_srv_cor();
+  port non_srv_flt() = non_flt_resp -> non_srv_flt();
+  port non_srv_iox() = non_iox_resp -> non_srv_iox();
+  port non_srv_nbr() = non_nbr_resp -> non_srv_nbr();
+  port non_srv_num() = non_num_resp -> non_srv_num();
+  port non_srv_reg() = non_reg_resp -> non_srv_reg();
+  port non_srv_rem() = non_rem_resp -> non_srv_rem();
+  port non_srv_seg() = non_seg_resp -> non_srv_seg();
+  port non_srv_vid() = non_vid_resp -> non_srv_vid();
+}
+
+component GroupNumberics {
+  port nbr_call_cmp() = nbr_cmp_req -> nbr_call_cmp();
+  port nbr_call_cor() = nbr_cor_req -> nbr_call_cor();
+  port nbr_call_non() = nbr_non_req -> nbr_call_non();
+  port nbr_call_tpx() = nbr_tpx_req -> nbr_call_tpx();
+  port nbr_srv_brg() = nbr_brg_resp -> nbr_srv_brg();
+  port nbr_srv_seg() = nbr_seg_resp -> nbr_srv_seg();
+}
+
+component GroupNumerics {
+  port num_call_cor() = num_cor_req -> num_call_cor();
+  port num_call_non() = num_non_req -> num_call_non();
+  port num_srv_reg() = num_reg_resp -> num_srv_reg();
+}
+
+component GroupRegistration {
+  port reg_call_brg() = reg_brg_req -> reg_call_brg();
+  port reg_call_cor() = reg_cor_req -> reg_call_cor();
+  port reg_call_flt() = reg_flt_req -> reg_call_flt();
+  port reg_call_iox() = reg_iox_req -> reg_call_iox();
+  port reg_call_non() = reg_non_req -> reg_call_non();
+  port reg_call_num() = reg_num_req -> reg_call_num();
+  port reg_call_tpx() = reg_tpx_req -> reg_call_tpx();
+}
+
+component GroupRemote {
+  port rem_call_brg() = rem_brg_req -> rem_call_brg();
+  port rem_call_cor() = rem_cor_req -> rem_call_cor();
+  port rem_call_flt() = rem_flt_req -> rem_call_flt();
+  port rem_call_iox() = rem_iox_req -> rem_call_iox();
+  port rem_call_non() = rem_non_req -> rem_call_non();
+  port rem_call_tpx() = rem_tpx_req -> rem_call_tpx();
+  port rem_call_vid() = rem_vid_req -> rem_call_vid();
+  port rem_srv_brg() = rem_brg_resp -> rem_srv_brg();
+}
+
+component GroupSegmentation {
+  port seg_call_brg() = seg_brg_req -> seg_call_brg();
+  port seg_call_cmp() = seg_cmp_req -> seg_call_cmp();
+  port seg_call_cor() = seg_cor_req -> seg_call_cor();
+  port seg_call_flt() = seg_flt_req -> seg_call_flt();
+  port seg_call_non() = seg_non_req -> seg_call_non();
+  port seg_call_nbr() = seg_nbr_req -> seg_call_nbr();
+  port seg_call_tpx() = seg_tpx_req -> seg_call_tpx();
+  port seg_srv_brg() = seg_brg_resp -> seg_srv_brg();
+}
+
+component GroupThirdParty {
+  port tpx_srv_brg() = tpx_brg_resp -> tpx_srv_brg();
+  port tpx_srv_cmp() = tpx_cmp_resp -> tpx_srv_cmp();
+  port tpx_srv_cor() = tpx_cor_resp -> tpx_srv_cor();
+  port tpx_srv_flt() = tpx_flt_resp -> tpx_srv_flt();
+  port tpx_srv_iox() = tpx_iox_resp -> tpx_srv_iox();
+  port tpx_srv_non() = tpx_non_resp -> tpx_srv_non();
+  port tpx_srv_nbr() = tpx_nbr_resp -> tpx_srv_nbr();
+  port tpx_srv_reg() = tpx_reg_resp -> tpx_srv_reg();
+  port tpx_srv_rem() = tpx_rem_resp -> tpx_srv_rem();
+  port tpx_srv_seg() = tpx_seg_resp -> tpx_srv_seg();
+  port tpx_srv_vid() = tpx_vid_resp -> tpx_srv_vid();
+}
+
+component GroupVideo {
+  port vid_call_brg() = vid_brg_req -> vid_call_brg();
+  port vid_call_cor() = vid_cor_req -> vid_call_cor();
+  port vid_call_flt() = vid_flt_req -> vid_call_flt();
+  port vid_call_iox() = vid_iox_req -> vid_call_iox();
+  port vid_call_non() = vid_non_req -> vid_call_non();
+  port vid_call_tpx() = vid_tpx_req -> vid_call_tpx();
+  port vid_srv_brg() = vid_brg_resp -> vid_srv_brg();
+  port vid_srv_rem() = vid_rem_resp -> vid_srv_rem();
+}
+
+system itk {
+
+  declare brg_to_cmp = CSConnector;
+  declare brg_to_cor = CSConnector;
+  declare brg_to_flt = CSConnector;
+  declare brg_to_iox = CSConnector;
+  declare brg_to_non = CSConnector;
+  declare brg_to_nbr = CSConnector;
+  declare brg_to_rem = CSConnector;
+  declare brg_to_seg = CSConnector;
+  declare brg_to_tpx = CSConnector;
+  declare brg_to_vid = CSConnector;
+  declare cmp_to_cor = CSConnector;
+  declare cmp_to_iox = CSConnector;
+  declare cmp_to_non = CSConnector;
+  declare cmp_to_tpx = CSConnector;
+  declare cor_to_non = CSConnector;
+  declare cor_to_tpx = CSConnector;
+  declare flt_to_cor = CSConnector;
+  declare flt_to_iox = CSConnector;
+  declare flt_to_non = CSConnector;
+  declare flt_to_tpx = CSConnector;
+  declare iox_to_cor = CSConnector;
+  declare iox_to_non = CSConnector;
+  declare iox_to_tpx = CSConnector;
+  declare non_to_cor = CSConnector;
+  declare non_to_tpx = CSConnector;
+  declare nbr_to_cmp = CSConnector;
+  declare nbr_to_cor = CSConnector;
+  declare nbr_to_non = CSConnector;
+  declare nbr_to_tpx = CSConnector;
+  declare num_to_cor = CSConnector;
+  declare num_to_non = CSConnector;
+  declare reg_to_brg = CSConnector;
+  declare reg_to_cor = CSConnector;
+  declare reg_to_flt = CSConnector;
+  declare reg_to_iox = CSConnector;
+  declare reg_to_non = CSConnector;
+  declare reg_to_num = CSConnector;
+  declare reg_to_tpx = CSConnector;
+  declare rem_to_brg = CSConnector;
+  declare rem_to_cor = CSConnector;
+  declare rem_to_flt = CSConnector;
+  declare rem_to_iox = CSConnector;
+  declare rem_to_non = CSConnector;
+  declare rem_to_tpx = CSConnector;
+  declare rem_to_vid = CSConnector;
+  declare seg_to_brg = CSConnector;
+  declare seg_to_cmp = CSConnector;
+  declare seg_to_cor = CSConnector;
+  declare seg_to_flt = CSConnector;
+  declare seg_to_non = CSConnector;
+  declare seg_to_nbr = CSConnector;
+  declare seg_to_tpx = CSConnector;
+  declare vid_to_brg = CSConnector;
+  declare vid_to_cor = CSConnector;
+  declare vid_to_flt = CSConnector;
+  declare vid_to_iox = CSConnector;
+  declare vid_to_non = CSConnector;
+  declare vid_to_tpx = CSConnector;
+
+  attach GroupBridge.brg_call_cmp() = brg_to_cmp.requester(1);
+  attach GroupCompatibility.cmp_srv_brg() = brg_to_cmp.responder();
+  attach GroupBridge.brg_call_cor() = brg_to_cor.requester(2);
+  attach GroupCore.cor_srv_brg() = brg_to_cor.responder();
+  attach GroupBridge.brg_call_flt() = brg_to_flt.requester(3);
+  attach GroupFiltering.flt_srv_brg() = brg_to_flt.responder();
+  attach GroupBridge.brg_call_iox() = brg_to_iox.requester(4);
+  attach GroupIO.iox_srv_brg() = brg_to_iox.responder();
+  attach GroupBridge.brg_call_non() = brg_to_non.requester(5);
+  attach GroupNonunit.non_srv_brg() = brg_to_non.responder();
+  attach GroupBridge.brg_call_nbr() = brg_to_nbr.requester(6);
+  attach GroupNumberics.nbr_srv_brg() = brg_to_nbr.responder();
+  attach GroupBridge.brg_call_rem() = brg_to_rem.requester(7);
+  attach GroupRemote.rem_srv_brg() = brg_to_rem.responder();
+  attach GroupBridge.brg_call_seg() = brg_to_seg.requester(8);
+  attach GroupSegmentation.seg_srv_brg() = brg_to_seg.responder();
+  attach GroupBridge.brg_call_tpx() = brg_to_tpx.requester(9);
+  attach GroupThirdParty.tpx_srv_brg() = brg_to_tpx.responder();
+  attach GroupBridge.brg_call_vid() = brg_to_vid.requester(10);
+  attach GroupVideo.vid_srv_brg() = brg_to_vid.responder();
+  attach GroupCompatibility.cmp_call_cor() = cmp_to_cor.requester(11);
+  attach GroupCore.cor_srv_cmp() = cmp_to_cor.responder();
+  attach GroupCompatibility.cmp_call_iox() = cmp_to_iox.requester(12);
+  attach GroupIO.iox_srv_cmp() = cmp_to_iox.responder();
+  attach GroupCompatibility.cmp_call_non() = cmp_to_non.requester(13);
+  attach GroupNonunit.non_srv_cmp() = cmp_to_non.responder();
+  attach GroupCompatibility.cmp_call_tpx() = cmp_to_tpx.requester(14);
+  attach GroupThirdParty.tpx_srv_cmp() = cmp_to_tpx.responder();
+  attach GroupCore.cor_call_non() = cor_to_non.requester(15);
+  attach GroupNonunit.non_srv_cor() = cor_to_non.responder();
+  attach GroupCore.cor_call_tpx() = cor_to_tpx.requester(16);
+  attach GroupThirdParty.tpx_srv_cor() = cor_to_tpx.responder();
+  attach GroupFiltering.flt_call_cor() = flt_to_cor.requester(17);
+  attach GroupCore.cor_srv_flt() = flt_to_cor.responder();
+  attach GroupFiltering.flt_call_iox() = flt_to_iox.requester(18);
+  attach GroupIO.iox_srv_flt() = flt_to_iox.responder();
+  attach GroupFiltering.flt_call_non() = flt_to_non.requester(19);
+  attach GroupNonunit.non_srv_flt() = flt_to_non.responder();
+  attach GroupFiltering.flt_call_tpx() = flt_to_tpx.requester(20);
+  attach GroupThirdParty.tpx_srv_flt() = flt_to_tpx.responder();
+  attach GroupIO.iox_call_cor() = iox_to_cor.requester(21);
+  attach GroupCore.cor_srv_iox() = iox_to_cor.responder();
+  attach GroupIO.iox_call_non() = iox_to_non.requester(22);
+  attach GroupNonunit.non_srv_iox() = iox_to_non.responder();
+  attach GroupIO.iox_call_tpx() = iox_to_tpx.requester(23);
+  attach GroupThirdParty.tpx_srv_iox() = iox_to_tpx.responder();
+  attach GroupNonunit.non_call_cor() = non_to_cor.requester(24);
+  attach GroupCore.cor_srv_non() = non_to_cor.responder();
+  attach GroupNonunit.non_call_tpx() = non_to_tpx.requester(25);
+  attach GroupThirdParty.tpx_srv_non() = non_to_tpx.responder();
+  attach GroupNumberics.nbr_call_cmp() = nbr_to_cmp.requester(26);
+  attach GroupCompatibility.cmp_srv_nbr() = nbr_to_cmp.responder();
+  attach GroupNumberics.nbr_call_cor() = nbr_to_cor.requester(27);
+  attach GroupCore.cor_srv_nbr() = nbr_to_cor.responder();
+  attach GroupNumberics.nbr_call_non() = nbr_to_non.requester(28);
+  attach GroupNonunit.non_srv_nbr() = nbr_to_non.responder();
+  attach GroupNumberics.nbr_call_tpx() = nbr_to_tpx.requester(29);
+  attach GroupThirdParty.tpx_srv_nbr() = nbr_to_tpx.responder();
+  attach GroupNumerics.num_call_cor() = num_to_cor.requester(30);
+  attach GroupCore.cor_srv_num() = num_to_cor.responder();
+  attach GroupNumerics.num_call_non() = num_to_non.requester(31);
+  attach GroupNonunit.non_srv_num() = num_to_non.responder();
+  attach GroupRegistration.reg_call_brg() = reg_to_brg.requester(32);
+  attach GroupBridge.brg_srv_reg() = reg_to_brg.responder();
+  attach GroupRegistration.reg_call_cor() = reg_to_cor.requester(33);
+  attach GroupCore.cor_srv_reg() = reg_to_cor.responder();
+  attach GroupRegistration.reg_call_flt() = reg_to_flt.requester(34);
+  attach GroupFiltering.flt_srv_reg() = reg_to_flt.responder();
+  attach GroupRegistration.reg_call_iox() = reg_to_iox.requester(35);
+  attach GroupIO.iox_srv_reg() = reg_to_iox.responder();
+  attach GroupRegistration.reg_call_non() = reg_to_non.requester(36);
+  attach GroupNonunit.non_srv_reg() = reg_to_non.responder();
+  attach GroupRegistration.reg_call_num() = reg_to_num.requester(37);
+  attach GroupNumerics.num_srv_reg() = reg_to_num.responder();
+  attach GroupRegistration.reg_call_tpx() = reg_to_tpx.requester(38);
+  attach GroupThirdParty.tpx_srv_reg() = reg_to_tpx.responder();
+  attach GroupRemote.rem_call_brg() = rem_to_brg.requester(39);
+  attach GroupBridge.brg_srv_rem() = rem_to_brg.responder();
+  attach GroupRemote.rem_call_cor() = rem_to_cor.requester(40);
+  attach GroupCore.cor_srv_rem() = rem_to_cor.responder();
+  attach GroupRemote.rem_call_flt() = rem_to_flt.requester(41);
+  attach GroupFiltering.flt_srv_rem() = rem_to_flt.responder();
+  attach GroupRemote.rem_call_iox() = rem_to_iox.requester(42);
+  attach GroupIO.iox_srv_rem() = rem_to_iox.responder();
+  attach GroupRemote.rem_call_non() = rem_to_non.requester(43);
+  attach GroupNonunit.non_srv_rem() = rem_to_non.responder();
+  attach GroupRemote.rem_call_tpx() = rem_to_tpx.requester(44);
+  attach GroupThirdParty.tpx_srv_rem() = rem_to_tpx.responder();
+  attach GroupRemote.rem_call_vid() = rem_to_vid.requester(45);
+  attach GroupVideo.vid_srv_rem() = rem_to_vid.responder();
+  attach GroupSegmentation.seg_call_brg() = seg_to_brg.requester(46);
+  attach GroupBridge.brg_srv_seg() = seg_to_brg.responder();
+  attach GroupSegmentation.seg_call_cmp() = seg_to_cmp.requester(47);
+  attach GroupCompatibility.cmp_srv_seg() = seg_to_cmp.responder();
+  attach GroupSegmentation.seg_call_cor() = seg_to_cor.requester(48);
+  attach GroupCore.cor_srv_seg() = seg_to_cor.responder();
+  attach GroupSegmentation.seg_call_flt() = seg_to_flt.requester(49);
+  attach GroupFiltering.flt_srv_seg() = seg_to_flt.responder();
+  attach GroupSegmentation.seg_call_non() = seg_to_non.requester(50);
+  attach GroupNonunit.non_srv_seg() = seg_to_non.responder();
+  attach GroupSegmentation.seg_call_nbr() = seg_to_nbr.requester(51);
+  attach GroupNumberics.nbr_srv_seg() = seg_to_nbr.responder();
+  attach GroupSegmentation.seg_call_tpx() = seg_to_tpx.requester(52);
+  attach GroupThirdParty.tpx_srv_seg() = seg_to_tpx.responder();
+  attach GroupVideo.vid_call_brg() = vid_to_brg.requester(53);
+  attach GroupBridge.brg_srv_vid() = vid_to_brg.responder();
+  attach GroupVideo.vid_call_cor() = vid_to_cor.requester(54);
+  attach GroupCore.cor_srv_vid() = vid_to_cor.responder();
+  attach GroupVideo.vid_call_flt() = vid_to_flt.requester(55);
+  attach GroupFiltering.flt_srv_vid() = vid_to_flt.responder();
+  attach GroupVideo.vid_call_iox() = vid_to_iox.requester(56);
+  attach GroupIO.iox_srv_vid() = vid_to_iox.responder();
+  attach GroupVideo.vid_call_non() = vid_to_non.requester(57);
+  attach GroupNonunit.non_srv_vid() = vid_to_non.responder();
+  attach GroupVideo.vid_call_tpx() = vid_to_tpx.requester(58);
+  attach GroupThirdParty.tpx_srv_vid() = vid_to_tpx.responder();
+
+  execute GroupBridge.brg_call_cmp() || GroupBridge.brg_call_cor() || GroupBridge.brg_call_flt() || GroupBridge.brg_call_iox() || GroupBridge.brg_call_non() || GroupBridge.brg_call_nbr() || GroupBridge.brg_call_rem() || GroupBridge.brg_call_seg() || GroupBridge.brg_call_tpx() || GroupBridge.brg_call_vid() || GroupBridge.brg_srv_reg() || GroupBridge.brg_srv_rem() || GroupBridge.brg_srv_seg() || GroupBridge.brg_srv_vid() || GroupCompatibility.cmp_call_cor() || GroupCompatibility.cmp_call_iox() || GroupCompatibility.cmp_call_non() || GroupCompatibility.cmp_call_tpx() || GroupCompatibility.cmp_srv_brg() || GroupCompatibility.cmp_srv_nbr() || GroupCompatibility.cmp_srv_seg() || GroupCore.cor_call_non() || GroupCore.cor_call_tpx() || GroupCore.cor_srv_brg() || GroupCore.cor_srv_cmp() || GroupCore.cor_srv_flt() || GroupCore.cor_srv_iox() || GroupCore.cor_srv_non() || GroupCore.cor_srv_nbr() || GroupCore.cor_srv_num() || GroupCore.cor_srv_reg() || GroupCore.cor_srv_rem() || GroupCore.cor_srv_seg() || GroupCore.cor_srv_vid() || GroupFiltering.flt_call_cor() || GroupFiltering.flt_call_iox() || GroupFiltering.flt_call_non() || GroupFiltering.flt_call_tpx() || GroupFiltering.flt_srv_brg() || GroupFiltering.flt_srv_reg() || GroupFiltering.flt_srv_rem() || GroupFiltering.flt_srv_seg() || GroupFiltering.flt_srv_vid() || GroupIO.iox_call_cor() || GroupIO.iox_call_non() || GroupIO.iox_call_tpx() || GroupIO.iox_srv_brg() || GroupIO.iox_srv_cmp() || GroupIO.iox_srv_flt() || GroupIO.iox_srv_reg() || GroupIO.iox_srv_rem() || GroupIO.iox_srv_vid() || GroupNonunit.non_call_cor() || GroupNonunit.non_call_tpx() || GroupNonunit.non_srv_brg() || GroupNonunit.non_srv_cmp() || GroupNonunit.non_srv_cor() || GroupNonunit.non_srv_flt() || GroupNonunit.non_srv_iox() || GroupNonunit.non_srv_nbr() || GroupNonunit.non_srv_num() || GroupNonunit.non_srv_reg() || GroupNonunit.non_srv_rem() || GroupNonunit.non_srv_seg() || GroupNonunit.non_srv_vid() || GroupNumberics.nbr_call_cmp() || GroupNumberics.nbr_call_cor() || GroupNumberics.nbr_call_non() || GroupNumberics.nbr_call_tpx() || GroupNumberics.nbr_srv_brg() || GroupNumberics.nbr_srv_seg() || GroupNumerics.num_call_cor() || GroupNumerics.num_call_non() || GroupNumerics.num_srv_reg() || GroupRegistration.reg_call_brg() || GroupRegistration.reg_call_cor() || GroupRegistration.reg_call_flt() || GroupRegistration.reg_call_iox() || GroupRegistration.reg_call_non() || GroupRegistration.reg_call_num() || GroupRegistration.reg_call_tpx() || GroupRemote.rem_call_brg() || GroupRemote.rem_call_cor() || GroupRemote.rem_call_flt() || GroupRemote.rem_call_iox() || GroupRemote.rem_call_non() || GroupRemote.rem_call_tpx() || GroupRemote.rem_call_vid() || GroupRemote.rem_srv_brg() || GroupSegmentation.seg_call_brg() || GroupSegmentation.seg_call_cmp() || GroupSegmentation.seg_call_cor() || GroupSegmentation.seg_call_flt() || GroupSegmentation.seg_call_non() || GroupSegmentation.seg_call_nbr() || GroupSegmentation.seg_call_tpx() || GroupSegmentation.seg_srv_brg() || GroupThirdParty.tpx_srv_brg() || GroupThirdParty.tpx_srv_cmp() || GroupThirdParty.tpx_srv_cor() || GroupThirdParty.tpx_srv_flt() || GroupThirdParty.tpx_srv_iox() || GroupThirdParty.tpx_srv_non() || GroupThirdParty.tpx_srv_nbr() || GroupThirdParty.tpx_srv_reg() || GroupThirdParty.tpx_srv_rem() || GroupThirdParty.tpx_srv_seg() || GroupThirdParty.tpx_srv_vid() || GroupVideo.vid_call_brg() || GroupVideo.vid_call_cor() || GroupVideo.vid_call_flt() || GroupVideo.vid_call_iox() || GroupVideo.vid_call_non() || GroupVideo.vid_call_tpx() || GroupVideo.vid_srv_brg() || GroupVideo.vid_srv_rem();
+}

@@ -1,0 +1,129 @@
+connector CSConnector {
+  role requester(j) = process -> req!j -> res?j -> Skip;
+  role responder() = req?j -> invoke -> process -> res!j -> responder();
+}
+
+connector REConnector {
+  role reader(j) = process -> req!j -> res?j -> Skip;
+  role readstorage() = req?j -> invoke -> process -> res!j -> readstorage();
+}
+
+connector CHAINConnector {
+  role forwarder(j) = process -> out!j -> follow?j -> done -> Skip;
+  role handler() = out?j -> process -> follow!j -> handler();
+}
+
+component General {
+  port read_input() = line_fetched -> read_input();
+  port exec_cmd() = cmd_dispatched -> exec_cmd();
+  port alloc_mem() = mem_allocated -> alloc_mem();
+  port report_error() = error_reported -> report_error();
+  port handle_signal() = signal_handled -> handle_signal();
+}
+
+component ErrorHandling {
+  port recv_error() = error_received -> recv_error();
+}
+
+component JobControl {
+  port ctrl_job() = job_controlled -> ctrl_job();
+}
+
+component LibBuiltins {
+  port run_builtin() = cmd_executed -> run_builtin();
+}
+
+component LibGlob {
+  port match_glob() = pattern_matched -> match_glob();
+  port match_completion() = completion_matched -> match_completion();
+}
+
+component LibIntl {
+  port provide_locale() = locale_provided -> provide_locale();
+}
+
+component LibHistory {
+  port store_entry() = entry_stored -> store_entry();
+  port read_entry() = entry_read -> read_entry();
+}
+
+component LibMalloc {
+  port alloc_general() = block_general -> alloc_general();
+  port alloc_readline() = block_readline -> alloc_readline();
+  port alloc_sh() = block_sh -> alloc_sh();
+}
+
+component LibReadline {
+  port edit_line() = line_edited -> edit_line();
+  port complete_file() = file_completed -> complete_file();
+}
+
+component LibSh {
+  port provide_util() = util_provided -> provide_util();
+}
+
+component LibTermcap {
+  port provide_termcap() = termcap_provided -> provide_termcap();
+}
+
+component LibTilde {
+  port do_expand() = tilde_done -> do_expand();
+}
+
+component SignalHandling {
+  port dispatch_signal() = signal_dispatched -> dispatch_signal();
+  port recv_signames() = signames_received -> recv_signames();
+}
+
+component Support {
+  port build_tool() = tool_built -> build_tool();
+}
+
+system bash {
+
+  declare general_to_readline = CSConnector;
+  declare general_to_builtin = CSConnector;
+  declare general_to_glob = CSConnector;
+  declare general_to_shutil = REConnector;
+  declare general_to_malloc = CSConnector;
+  declare general_to_error = CSConnector;
+  declare general_to_job = CSConnector;
+  declare general_to_signal = CSConnector;
+  declare general_to_intl = REConnector;
+  declare readline_to_history = CSConnector;
+  declare readline_to_termcap = REConnector;
+  declare readline_to_tilde = CSConnector;
+  declare readline_to_malloc = CSConnector;
+  declare readline_to_glob = CSConnector;
+  declare builtin_to_history = REConnector;
+  declare sh_to_malloc = CSConnector;
+  declare support_to_signal = CHAINConnector;
+
+  attach General.read_input() = general_to_readline.requester(1);
+  attach General.exec_cmd() = general_to_builtin.requester(2) <*> general_to_glob.requester(3) <*> general_to_job.requester(7) <*> general_to_shutil.reader(4) <*> general_to_intl.reader(9);
+  attach General.alloc_mem() = general_to_malloc.requester(5);
+  attach General.report_error() = general_to_error.requester(6);
+  attach General.handle_signal() = general_to_signal.requester(8);
+
+  attach ErrorHandling.recv_error() = general_to_error.responder();
+  attach JobControl.ctrl_job() = general_to_job.responder();
+  attach LibBuiltins.run_builtin() = general_to_builtin.responder() <*> builtin_to_history.reader(10);
+  attach LibGlob.match_glob() = general_to_glob.responder();
+  attach LibGlob.match_completion() = readline_to_glob.responder();
+  attach LibIntl.provide_locale() = general_to_intl.readstorage();
+  attach LibHistory.store_entry() = readline_to_history.responder();
+  attach LibHistory.read_entry() = builtin_to_history.readstorage();
+  attach LibMalloc.alloc_general() = general_to_malloc.responder();
+  attach LibMalloc.alloc_readline() = readline_to_malloc.responder();
+  attach LibMalloc.alloc_sh() = sh_to_malloc.responder();
+  attach LibReadline.edit_line() = general_to_readline.responder() <*> readline_to_history.requester(14) <*> readline_to_termcap.reader(12) <*> readline_to_tilde.requester(11) <*> readline_to_malloc.requester(13);
+  attach LibReadline.complete_file() = readline_to_glob.requester(15);
+  attach LibSh.provide_util() = general_to_shutil.readstorage() <*> sh_to_malloc.requester(16);
+  attach LibTermcap.provide_termcap() = readline_to_termcap.readstorage();
+  attach LibTilde.do_expand() = readline_to_tilde.responder();
+  attach SignalHandling.dispatch_signal() = general_to_signal.responder();
+  attach SignalHandling.recv_signames() = support_to_signal.handler();
+  attach Support.build_tool() = support_to_signal.forwarder(17);
+
+  execute General.read_input() || General.exec_cmd() || General.alloc_mem() || General.report_error() || General.handle_signal() || ErrorHandling.recv_error() || JobControl.ctrl_job() || LibBuiltins.run_builtin() || LibGlob.match_glob() || LibGlob.match_completion() || LibIntl.provide_locale() || LibHistory.store_entry() || LibHistory.read_entry() || LibMalloc.alloc_general() || LibMalloc.alloc_readline() || LibMalloc.alloc_sh() || LibReadline.edit_line() || LibReadline.complete_file() || LibSh.provide_util() || LibTermcap.provide_termcap() || LibTilde.do_expand() || SignalHandling.dispatch_signal() || SignalHandling.recv_signames() || Support.build_tool();
+}

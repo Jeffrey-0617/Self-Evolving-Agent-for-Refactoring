@@ -1,0 +1,621 @@
+connector CSConnector {
+  role sender(j) = process -> req!j -> res?j -> Skip;
+  role receiver() = req?j -> invoke -> process -> res!j -> receiver();
+}
+
+connector REConnector {
+  role reader(j) = process -> req!j -> res?j -> Skip;
+  role readstorage() = req?j -> invoke -> process -> res!j -> readstorage();
+}
+
+connector WRConnector {
+  role writer(j) = process -> req!j -> res?j -> Skip;
+  role writestorage() = req?j -> invoke -> process -> res!j -> writestorage();
+}
+
+connector CHAINConnector {
+  role forwarder(j) = process -> out!j -> follow?j -> done -> Skip;
+  role handler() = out?j -> process -> follow!j -> handler();
+}
+
+connector ESConnector {
+  role eventpublisher(j) = process -> pevt!j -> sevt?j -> bevt!j -> broadcast -> Skip;
+  role eventsubscriber() = bevt?j -> process -> eventsubscriber();
+  role eventstore() = pevt?j -> process -> sevt!j -> persist -> eventstore();
+}
+
+connector PSConnector {
+  role publisher(j) = process -> pub!j -> Skip;
+  role subscriber() = pub?j -> process -> subscriber();
+}
+
+connector LOGConnector {
+  role emitter(j) = record -> log!j -> confirm?j -> Skip;
+  role logger() = log?j -> archive -> process -> confirm!j -> logger();
+}
+
+connector PIPEConnector {
+  role producer(j) = process -> data!j -> ack?j -> Skip;
+  role consumer() = data?j -> process -> ack!j -> consumer();
+}
+
+component Base {
+  port provide_util() = dispatch -> provide_util();
+  port provide_thread() = schedule -> provide_thread();
+  port provide_memory() = alloc -> provide_memory();
+}
+
+component BaseSub {
+  port extend_base() = hook -> extend_base();
+}
+
+component Allocator {
+  port mem_alloc() = allocated -> mem_alloc();
+}
+
+component Zlib {
+  port compress() = deflated -> compress();
+  port decompress() = inflated -> decompress();
+}
+
+component Protobuf {
+  port serialize() = encoded -> serialize();
+  port deserialize_sync() = decoded_sync -> deserialize_sync();
+  port deserialize_print() = decoded_print -> deserialize_print();
+}
+
+component Re2 {
+  port match_regex() = matched -> match_regex();
+}
+
+component Crypto {
+  port encrypt() = cipher -> encrypt();
+  port decrypt() = plain -> decrypt();
+  port sign() = signed -> sign();
+}
+
+component Platform {
+  port os_abstract() = dispatched -> os_abstract();
+  port file_ops() = handled -> file_ops();
+  port recv_sandbox() = sandbox_recv -> recv_sandbox();
+}
+
+component Dbus {
+  port send_msg() = transmitted -> send_msg();
+  port recv_msg() = received -> recv_msg();
+}
+
+component Gio {
+  port file_io() = completed -> file_io();
+}
+
+component SeccompBpf {
+  port enforce_sandbox() = enforced -> enforce_sandbox();
+}
+
+component SuidSandboxClient {
+  port request_sandbox() = sandboxed -> request_sandbox();
+}
+
+component LibcUrandomOverride {
+  port provide_random() = generated -> provide_random();
+}
+
+component IPC {
+  port send_ipc() = routed -> send_ipc();
+  port recv_browser() = delivered_browser -> recv_browser();
+  port recv_renderer() = delivered_renderer -> recv_renderer();
+  port recv_gpu() = delivered_gpu -> recv_gpu();
+}
+
+component Net {
+  port fetch() = fetched -> fetch();
+  port resolve_dns() = resolved -> resolve_dns();
+  port open_socket() = connected -> open_socket();
+}
+
+component GoogleApis {
+  port call_api() = responded -> call_api();
+}
+
+component GoogleUrl {
+  port parse_url() = parsed -> parse_url();
+}
+
+component CacheInvalidation {
+  port invalidate() = cleared -> invalidate();
+  port check_cache() = checked -> check_cache();
+}
+
+component Sql {
+  port exec_query() = queried -> exec_query();
+  port exec_write() = written -> exec_write();
+}
+
+component LevelDatabase {
+  port db_read() = retrieved -> db_read();
+  port db_write() = stored -> db_write();
+}
+
+component FileApi {
+  port read_file() = fileread -> read_file();
+  port write_file() = filewritten -> write_file();
+}
+
+component Gpu {
+  port dispatch_cmd() = dispatched -> dispatch_cmd();
+  port manage_context() = ctx_ready -> manage_context();
+}
+
+component Gl {
+  port gl_call() = rendered -> gl_call();
+}
+
+component Gles2 {
+  port gles_call() = drawn -> gles_call();
+}
+
+component CommandBufferClient {
+  port submit_cmd() = submitted -> submit_cmd();
+}
+
+component CommandBufferService {
+  port exec_cmd() = executed -> exec_cmd();
+}
+
+component Gles2Implementation {
+  port impl_call() = implemented -> impl_call();
+}
+
+component Skia {
+  port draw_2d() = painted -> draw_2d();
+  port rasterize() = rasterized -> rasterize();
+  port recv_print() = print_recv -> recv_print();
+}
+
+component CC {
+  port composite() = composited -> composite();
+  port schedule_frame() = frame_ready -> schedule_frame();
+}
+
+component Media {
+  port decode_stream() = decoded -> decode_stream();
+  port encode_stream() = encoded -> encode_stream();
+}
+
+component MediaAec {
+  port cancel_echo() = cleaned -> cancel_echo();
+}
+
+component MediaVideo {
+  port decode_video() = frame_decoded -> decode_video();
+  port encode_video() = frame_encoded -> encode_video();
+}
+
+component Yuv {
+  port convert_yuv() = converted -> convert_yuv();
+}
+
+component Libyuv {
+  port scale_yuv() = scaled -> scale_yuv();
+}
+
+component Libvpx {
+  port decode_vp9() = vp9_decoded -> decode_vp9();
+  port encode_vp9() = vp9_encoded -> encode_vp9();
+}
+
+component Libwebp {
+  port decode_webp() = webp_decoded -> decode_webp();
+}
+
+component Libspeex {
+  port decode_audio() = audio_decoded -> decode_audio();
+}
+
+component Libjpeg {
+  port decode_jpeg() = jpeg_decoded -> decode_jpeg();
+  port encode_jpeg() = jpeg_encoded -> encode_jpeg();
+}
+
+component IccJpeg {
+  port apply_profile() = profiled -> apply_profile();
+}
+
+component Icui18n {
+  port format_locale() = formatted -> format_locale();
+}
+
+component Icuuc {
+  port normalize_text() = normalized -> normalize_text();
+}
+
+component Hunspell {
+  port check_spell() = spell_checked -> check_spell();
+}
+
+component V8I18n {
+  port intl_api() = intl_result -> intl_api();
+  port recv_v8i18n() = v8i18n_recv -> recv_v8i18n();
+}
+
+component Cld {
+  port detect_lang() = lang_detected -> detect_lang();
+}
+
+component Translator {
+  port translate_page() = page_translated -> translate_page();
+}
+
+component Sfntly {
+  port subset_font() = font_subsetted -> subset_font();
+}
+
+component WebcorePlatform {
+  port platform_bridge() = bridged -> platform_bridge();
+  port load_resource() = resource_loaded -> load_resource();
+}
+
+component WebcoreWebkit {
+  port parse_dom() = dom_parsed -> parse_dom();
+  port layout_page() = laid_out -> layout_page();
+  port exec_script() = script_done -> exec_script();
+}
+
+component WebkitBase {
+  port provide_webkit_util() = util_ready -> provide_webkit_util();
+  port forward_to_webcore() = webkit_forwarded -> forward_to_webcore();
+}
+
+component V8Base {
+  port compile_js() = compiled -> compile_js();
+  port run_js() = js_result -> run_js();
+  port gc_collect() = gc_done -> gc_collect();
+}
+
+component Content {
+  port render_page() = page_rendered -> render_page();
+  port navigate() = navigated -> navigate();
+  port handle_input() = input_handled -> handle_input();
+  port call_plugin_api() = plugin_called -> call_plugin_api();
+}
+
+component Browser {
+  port open_tab() = tab_opened -> open_tab();
+  port close_tab() = tab_closed -> close_tab();
+  port user_navigate() = url_loaded -> user_navigate();
+  port show_ui() = ui_shown -> show_ui();
+}
+
+component UI {
+  port draw_widget() = widget_drawn -> draw_widget();
+  port handle_event() = event_handled -> handle_event();
+}
+
+component Jingle {
+  port setup_session() = session_up -> setup_session();
+}
+
+component JingleGlue {
+  port bridge_jingle() = glued -> bridge_jingle();
+  port accept_content() = content_glued -> accept_content();
+}
+
+component Libphone {
+  port parse_phone() = phone_parsed -> parse_phone();
+}
+
+component Printing {
+  port print_page() = printed -> print_page();
+  port preview_page() = previewed -> preview_page();
+}
+
+component Sync {
+  port sync_data() = synced -> sync_data();
+  port resolve_conflict() = conflict_resolved -> resolve_conflict();
+}
+
+component Remoting {
+  port start_session() = session_started -> start_session();
+  port stream_display() = display_streamed -> stream_display();
+}
+
+component RemotingClient {
+  port connect_remote() = remote_connected -> connect_remote();
+}
+
+component Notifier {
+  port push_notify() = notified -> push_notify();
+}
+
+component Nacl {
+  port load_module() = module_loaded -> load_module();
+  port exec_native() = native_done -> exec_native();
+}
+
+component Nonnacl {
+  port fallback_exec() = fallback_done -> fallback_exec();
+}
+
+component ServiceNacl {
+  port serve_nacl() = nacl_served -> serve_nacl();
+}
+
+component Ppapi {
+  port call_plugin() = plugin_result -> call_plugin();
+  port init_plugin() = plugin_ready -> init_plugin();
+}
+
+component Validator {
+  port validate_binary() = binary_valid -> validate_binary();
+}
+
+component ValidatorsNc {
+  port validate_nacl() = nacl_valid -> validate_nacl();
+  port validate_plugin() = plugin_validated -> validate_plugin();
+}
+
+component GenperfLibs {
+  port gen_perf_hash() = hash_generated -> gen_perf_hash();
+}
+
+component PlatformQualLib {
+  port qualify_platform() = qualified -> qualify_platform();
+}
+
+system chromium {
+
+  
+  declare base_to_basesub = CHAINConnector;
+  declare base_to_allocator = CHAINConnector;
+  declare base_to_platform = CHAINConnector;
+
+  attach Base.provide_util() = base_to_basesub.forwarder(1);
+  attach BaseSub.extend_base() = base_to_basesub.handler();
+  attach Base.provide_memory() = base_to_allocator.forwarder(2);
+  attach Allocator.mem_alloc() = base_to_allocator.handler();
+  attach Base.provide_thread() = base_to_platform.forwarder(3);
+  attach Platform.os_abstract() = base_to_platform.handler();
+
+  
+  declare platform_to_dbus = CSConnector;
+  declare platform_to_gio = CSConnector;
+  declare platform_to_seccomp = CSConnector;
+  declare platform_to_suid = CSConnector;
+  declare platform_to_urandom = REConnector;
+
+  attach Platform.file_ops() = platform_to_dbus.sender(10) <*> platform_to_gio.sender(11);
+  attach Dbus.send_msg() = platform_to_dbus.receiver();
+  attach Gio.file_io() = platform_to_gio.receiver();
+  attach SeccompBpf.enforce_sandbox() = platform_to_seccomp.receiver();
+  attach SuidSandboxClient.request_sandbox() = platform_to_seccomp.sender(12) <*> platform_to_suid.sender(13);
+  attach Platform.recv_sandbox() = platform_to_suid.receiver();
+  attach LibcUrandomOverride.provide_random() = platform_to_urandom.readstorage();
+
+  
+  declare crypto_sign_pipe = CSConnector;
+  attach Crypto.sign() = crypto_sign_pipe.sender(20);
+
+  
+  declare browser_to_ipc = CHAINConnector;
+  declare ipc_to_content = CHAINConnector;
+  declare ipc_to_gpu = CHAINConnector;
+
+  attach Browser.open_tab() = browser_to_ipc.forwarder(30);
+  attach IPC.send_ipc() = browser_to_ipc.handler() <*> ipc_to_content.forwarder(31) <*> ipc_to_gpu.forwarder(32);
+  attach IPC.recv_browser() = platform_to_urandom.reader(14);
+  attach Content.render_page() = ipc_to_content.handler();
+  attach Gpu.dispatch_cmd() = ipc_to_gpu.handler();
+
+  
+  declare net_to_dns = CSConnector;
+  declare net_to_socket = CSConnector;
+  declare net_to_cache = CSConnector;
+  declare gapi_to_net = CSConnector;
+  declare gurl_to_net = CHAINConnector;
+
+  attach Net.resolve_dns() = net_to_dns.sender(40);
+  attach Net.open_socket() = net_to_socket.sender(41) <*> crypto_encrypt.reader(202);
+  attach Net.fetch() = gapi_to_net.receiver() <*> net_to_cache.sender(42);
+  attach GoogleApis.call_api() = gapi_to_net.sender(43);
+  attach GoogleUrl.parse_url() = gurl_to_net.forwarder(44);
+  attach CacheInvalidation.invalidate() = net_to_cache.receiver();
+  attach CacheInvalidation.check_cache() = net_to_dns.receiver();
+  attach Dbus.recv_msg() = net_to_socket.receiver();
+
+  
+  declare content_to_sql_read = REConnector;
+  declare content_to_sql_write = WRConnector;
+  declare content_to_leveldb_read = REConnector;
+  declare content_to_leveldb_write = WRConnector;
+  declare content_to_fileapi = CSConnector;
+
+  attach Sql.exec_query() = content_to_sql_read.readstorage();
+  attach Sql.exec_write() = content_to_sql_write.writestorage();
+  attach LevelDatabase.db_read() = content_to_leveldb_read.readstorage();
+  attach LevelDatabase.db_write() = content_to_leveldb_write.writestorage();
+  attach FileApi.read_file() = content_to_fileapi.receiver();
+  attach FileApi.write_file() = content_to_sql_write.writer(50);
+
+  
+  declare cmdbuf_client_to_service = CHAINConnector;
+  declare cmdbuf_to_gl = CHAINConnector;
+  declare gl_to_gles2 = CHAINConnector;
+  declare gles2_to_impl = CHAINConnector;
+  declare gpu_to_skia = CHAINConnector;
+  declare skia_to_cc = CHAINConnector;
+  declare cc_to_gpu = CHAINConnector;
+
+  attach CommandBufferClient.submit_cmd() = cmdbuf_client_to_service.forwarder(60);
+  attach CommandBufferService.exec_cmd() = cmdbuf_client_to_service.handler() <*> cmdbuf_to_gl.forwarder(61);
+  attach Gl.gl_call() = cmdbuf_to_gl.handler() <*> gl_to_gles2.forwarder(62);
+  attach Gles2.gles_call() = gl_to_gles2.handler() <*> gles2_to_impl.forwarder(63);
+  attach Gles2Implementation.impl_call() = gles2_to_impl.handler();
+  attach Gpu.manage_context() = cc_to_gpu.handler() <*> gpu_to_skia.forwarder(64);
+  attach Skia.draw_2d() = gpu_to_skia.handler() <*> skia_to_cc.forwarder(65);
+  attach Skia.rasterize() = gurl_to_net.handler();
+  attach CC.composite() = skia_to_cc.handler() <*> cc_to_gpu.forwarder(66);
+  attach CC.schedule_frame() = crypto_sign_pipe.receiver();
+
+  
+  declare media_to_aec = CHAINConnector;
+  declare media_to_video = CHAINConnector;
+  declare video_to_yuv = CHAINConnector;
+  declare yuv_to_libyuv = CHAINConnector;
+  declare video_to_vpx = PIPEConnector;
+  declare media_to_webp = PIPEConnector;
+  declare media_to_speex = PIPEConnector;
+  declare media_to_jpeg = PIPEConnector;
+  declare jpeg_to_icc = CHAINConnector;
+
+  attach Media.decode_stream() = media_to_aec.forwarder(70) <*> media_to_video.forwarder(71);
+  attach Media.encode_stream() = media_to_webp.producer(72) <*> media_to_speex.producer(73) <*> media_to_jpeg.producer(74);
+  attach MediaAec.cancel_echo() = media_to_aec.handler();
+  attach MediaVideo.decode_video() = media_to_video.handler() <*> video_to_yuv.forwarder(75) <*> video_to_vpx.producer(76);
+  attach MediaVideo.encode_video() = content_to_fileapi.sender(51);
+  attach Yuv.convert_yuv() = video_to_yuv.handler() <*> yuv_to_libyuv.forwarder(77);
+  attach Libyuv.scale_yuv() = yuv_to_libyuv.handler();
+  attach Libvpx.decode_vp9() = video_to_vpx.consumer();
+  attach Libvpx.encode_vp9() = content_to_sql_read.reader(52);
+  attach Libwebp.decode_webp() = media_to_webp.consumer();
+  attach Libspeex.decode_audio() = media_to_speex.consumer();
+  attach Libjpeg.decode_jpeg() = media_to_jpeg.consumer() <*> jpeg_to_icc.forwarder(78);
+  attach Libjpeg.encode_jpeg() = content_to_leveldb_read.reader(53);
+  attach IccJpeg.apply_profile() = jpeg_to_icc.handler();
+
+  
+  declare icu_i18n_to_uc = CHAINConnector;
+  declare content_to_hunspell = CSConnector;
+  declare v8_to_i18n = CHAINConnector;
+  declare content_to_cld = CSConnector;
+  declare cld_to_translator = CHAINConnector;
+  declare content_to_sfntly = CSConnector;
+
+  attach Icui18n.format_locale() = icu_i18n_to_uc.forwarder(80);
+  attach Icuuc.normalize_text() = icu_i18n_to_uc.handler();
+  attach Hunspell.check_spell() = content_to_hunspell.receiver();
+  attach V8I18n.intl_api() = v8_to_i18n.handler();
+  attach Cld.detect_lang() = content_to_cld.receiver() <*> cld_to_translator.forwarder(82);
+  attach Translator.translate_page() = cld_to_translator.handler();
+  attach Sfntly.subset_font() = content_to_sfntly.receiver();
+
+  
+  declare webcore_to_platform = CHAINConnector;
+  declare webkit_to_webcore = CHAINConnector;
+  declare webcore_to_v8 = CSConnector;
+  declare v8_to_v8i18n = CHAINConnector;
+  declare webkit_base_pipe = CHAINConnector;
+  declare webcore_to_net = CSConnector;
+  declare webcore_to_skia = CSConnector;
+
+  attach WebcorePlatform.platform_bridge() = webcore_to_platform.handler();
+  attach WebcorePlatform.load_resource() = webcore_to_net.sender(90) <*> webcore_to_skia.sender(91);
+  attach WebcoreWebkit.parse_dom() = webkit_to_webcore.handler() <*> webcore_to_platform.forwarder(92) <*> webcore_to_v8.sender(93);
+  attach WebcoreWebkit.layout_page() = content_to_hunspell.sender(81) <*> content_to_cld.sender(83);
+  attach WebcoreWebkit.exec_script() = content_to_sfntly.sender(84);
+  attach WebkitBase.provide_webkit_util() = webkit_base_pipe.forwarder(94);
+  attach WebkitBase.forward_to_webcore() = webkit_to_webcore.forwarder(200);
+  attach V8Base.compile_js() = webcore_to_v8.receiver() <*> v8_to_v8i18n.forwarder(95) <*> v8_to_i18n.forwarder(96);
+  attach V8I18n.recv_v8i18n() = v8_to_v8i18n.handler();
+  attach V8Base.run_js() = webkit_base_pipe.handler();
+  attach V8Base.gc_collect() = webcore_to_net.receiver();
+
+  
+  declare browser_to_content = CSConnector;
+  declare browser_to_ui = CHAINConnector;
+  declare browser_to_net = CSConnector;
+  declare content_to_webcore = CHAINConnector;
+  declare ui_to_skia = CSConnector;
+
+  attach Browser.user_navigate() = browser_to_content.sender(100) <*> browser_to_net.sender(101);
+  attach Browser.show_ui() = browser_to_ui.forwarder(102);
+  attach Browser.close_tab() = webcore_to_skia.receiver();
+  attach Content.navigate() = browser_to_content.receiver() <*> content_to_webcore.forwarder(103);
+  attach Content.handle_input() = content_to_sql_read.reader(104) <*> content_to_leveldb_write.writer(105);
+  attach UI.draw_widget() = browser_to_ui.handler() <*> ui_to_skia.sender(106);
+  attach UI.handle_event() = browser_to_net.receiver();
+  attach IPC.recv_renderer() = content_to_webcore.handler();
+  attach IPC.recv_gpu() = ui_to_skia.receiver();
+
+  
+  declare jingle_to_glue = CHAINConnector;
+  declare content_to_jingle = CSConnector;
+  declare jingle_to_phone = REConnector;
+
+  attach Jingle.setup_session() = jingle_to_glue.forwarder(110) <*> jingle_to_phone.reader(111);
+  attach JingleGlue.bridge_jingle() = jingle_to_glue.handler();
+  attach JingleGlue.accept_content() = content_to_jingle.receiver();
+  attach Libphone.parse_phone() = jingle_to_phone.readstorage();
+
+  
+  declare browser_to_printing = CSConnector;
+  declare printing_to_skia = REConnector;
+
+  attach Printing.print_page() = browser_to_printing.receiver() <*> printing_to_skia.reader(121);
+  attach Printing.preview_page() = content_to_jingle.sender(120);
+  attach Skia.recv_print() = printing_to_skia.readstorage();
+
+  
+  declare browser_to_sync = CSConnector;
+  declare sync_to_net = CSConnector;
+  declare remoting_to_client = CHAINConnector;
+  declare remoting_to_media = CSConnector;
+  declare sync_to_notifier = PSConnector;
+
+  attach Sync.sync_data() = browser_to_sync.receiver() <*> sync_to_net.sender(130) <*> sync_to_notifier.publisher(131);
+  attach Sync.resolve_conflict() = content_to_leveldb_read.reader(132);
+  attach Remoting.start_session() = remoting_to_client.forwarder(133) <*> remoting_to_media.sender(134);
+  attach Remoting.stream_display() = sync_to_net.receiver();
+  attach RemotingClient.connect_remote() = remoting_to_client.handler();
+  attach Notifier.push_notify() = sync_to_notifier.subscriber();
+
+  
+  declare nacl_to_service = CSConnector;
+  declare nacl_to_validator = CSConnector;
+  declare nonnacl_pipe = CHAINConnector;
+
+  attach Nacl.load_module() = nacl_to_service.sender(140) <*> nacl_to_validator.sender(141);
+  attach Nacl.exec_native() = remoting_to_media.receiver();
+  attach ServiceNacl.serve_nacl() = nacl_to_service.receiver();
+  attach Nonnacl.fallback_exec() = nonnacl_pipe.handler();
+
+  
+  declare content_to_ppapi = CSConnector;
+  declare ppapi_to_nacl = CHAINConnector;
+
+  attach Content.call_plugin_api() = content_to_ppapi.sender(201);
+  attach Ppapi.call_plugin() = content_to_ppapi.receiver() <*> ppapi_to_nacl.forwarder(150);
+  attach Ppapi.init_plugin() = nonnacl_pipe.forwarder(151);
+
+  
+  declare validator_to_nc = CHAINConnector;
+
+  attach Validator.validate_binary() = nacl_to_validator.receiver() <*> validator_to_nc.forwarder(160);
+  attach ValidatorsNc.validate_nacl() = validator_to_nc.handler();
+  attach ValidatorsNc.validate_plugin() = ppapi_to_nacl.handler();
+
+  
+  declare genperf_pipe = REConnector;
+  declare platqual_pipe = CSConnector;
+
+  attach GenperfLibs.gen_perf_hash() = genperf_pipe.readstorage();
+  attach PlatformQualLib.qualify_platform() = platqual_pipe.receiver();
+
+  
+  declare proto_serialize = REConnector;
+  declare zlib_compress = REConnector;
+  declare re2_match = REConnector;
+  declare crypto_encrypt = REConnector;
+
+  attach Protobuf.serialize() = proto_serialize.readstorage();
+  attach Protobuf.deserialize_sync() = browser_to_sync.sender(170);
+  attach Protobuf.deserialize_print() = browser_to_printing.sender(171);
+  attach Zlib.compress() = zlib_compress.readstorage();
+  attach Zlib.decompress() = proto_serialize.reader(172) <*> platqual_pipe.sender(173);
+  attach Re2.match_regex() = re2_match.readstorage();
+  attach Crypto.encrypt() = crypto_encrypt.readstorage();
+  attach Crypto.decrypt() = zlib_compress.reader(174) <*> re2_match.reader(175) <*> genperf_pipe.reader(176);
+
+  
+  execute Base.provide_util() || Base.provide_thread() || Base.provide_memory() || BaseSub.extend_base() || Allocator.mem_alloc() || Zlib.compress() || Zlib.decompress() || Protobuf.serialize() || Protobuf.deserialize_sync() || Protobuf.deserialize_print() || Re2.match_regex() || Crypto.encrypt() || Crypto.decrypt() || Crypto.sign() || Platform.os_abstract() || Platform.file_ops() || Platform.recv_sandbox() || Dbus.send_msg() || Dbus.recv_msg() || Gio.file_io() || SeccompBpf.enforce_sandbox() || SuidSandboxClient.request_sandbox() || LibcUrandomOverride.provide_random() || IPC.send_ipc() || IPC.recv_browser() || IPC.recv_renderer() || IPC.recv_gpu() || Net.fetch() || Net.resolve_dns() || Net.open_socket() || GoogleApis.call_api() || GoogleUrl.parse_url() || CacheInvalidation.invalidate() || CacheInvalidation.check_cache() || Sql.exec_query() || Sql.exec_write() || LevelDatabase.db_read() || LevelDatabase.db_write() || FileApi.read_file() || FileApi.write_file() || Gpu.dispatch_cmd() || Gpu.manage_context() || Gl.gl_call() || Gles2.gles_call() || CommandBufferClient.submit_cmd() || CommandBufferService.exec_cmd() || Gles2Implementation.impl_call() || Skia.draw_2d() || Skia.rasterize() || Skia.recv_print() || CC.composite() || CC.schedule_frame() || Media.decode_stream() || Media.encode_stream() || MediaAec.cancel_echo() || MediaVideo.decode_video() || MediaVideo.encode_video() || Yuv.convert_yuv() || Libyuv.scale_yuv() || Libvpx.decode_vp9() || Libvpx.encode_vp9() || Libwebp.decode_webp() || Libspeex.decode_audio() || Libjpeg.decode_jpeg() || Libjpeg.encode_jpeg() || IccJpeg.apply_profile() || Icui18n.format_locale() || Icuuc.normalize_text() || Hunspell.check_spell() || V8I18n.intl_api() || V8I18n.recv_v8i18n() || Cld.detect_lang() || Translator.translate_page() || Sfntly.subset_font() || WebcorePlatform.platform_bridge() || WebcorePlatform.load_resource() || WebcoreWebkit.parse_dom() || WebcoreWebkit.layout_page() || WebcoreWebkit.exec_script() || WebkitBase.provide_webkit_util() || WebkitBase.forward_to_webcore() || V8Base.compile_js() || V8Base.run_js() || V8Base.gc_collect() || Content.render_page() || Content.navigate() || Content.handle_input() || Content.call_plugin_api() || Browser.open_tab() || Browser.close_tab() || Browser.user_navigate() || Browser.show_ui() || UI.draw_widget() || UI.handle_event() || Jingle.setup_session() || JingleGlue.bridge_jingle() || JingleGlue.accept_content() || Libphone.parse_phone() || Printing.print_page() || Printing.preview_page() || Sync.sync_data() || Sync.resolve_conflict() || Remoting.start_session() || Remoting.stream_display() || RemotingClient.connect_remote() || Notifier.push_notify() || Nacl.load_module() || Nacl.exec_native() || Nonnacl.fallback_exec() || ServiceNacl.serve_nacl() || Ppapi.call_plugin() || Ppapi.init_plugin() || Validator.validate_binary() || ValidatorsNc.validate_nacl() || ValidatorsNc.validate_plugin() || GenperfLibs.gen_perf_hash() || PlatformQualLib.qualify_platform();
+}

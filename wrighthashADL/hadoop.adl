@@ -1,0 +1,717 @@
+connector CSConnector {
+  role requester(j) = process -> req!j -> res?j -> Skip;
+  role responder() = req?j -> invoke -> process -> res!j -> responder();
+}
+
+component Balancer {
+  port bal_serve_dno() = bal_dno_served -> bal_serve_dno();
+  port bal_serve_hdf() = bal_hdf_served -> bal_serve_hdf();
+  port bal_serve_nno() = bal_nno_served -> bal_serve_nno();
+}
+
+component ChainMapReduce {
+  port cmr_serve_hmr() = cmr_hmr_served -> cmr_serve_hmr();
+}
+
+component ClientDatanodeProtocol {
+  port cdp_serve_dno() = cdp_dno_served -> cdp_serve_dno();
+  port cdp_serve_hdf() = cdp_hdf_served -> cdp_serve_hdf();
+}
+
+component ClientFacingExceptions {
+  port cfe_serve_hdf() = cfe_hdf_served -> cfe_serve_hdf();
+}
+
+component ClientProtocol {
+  port cpr_serve_hdf() = cpr_hdf_served -> cpr_serve_hdf();
+}
+
+component Connectors {
+  port con_serve_hio() = con_hio_served -> con_serve_hio();
+}
+
+component CoreNameNodeStructures {
+  port cns_serve_hdf() = cns_hdf_served -> cns_serve_hdf();
+  port cns_serve_nno() = cns_nno_served -> cns_serve_nno();
+}
+
+component CppPipesJob {
+  port cpj_serve_hmr() = cpj_hmr_served -> cpj_serve_hmr();
+}
+
+component CppPipesProtocol {
+  port cpp_serve_hmr() = cpp_hmr_served -> cpp_serve_hmr();
+}
+
+component DBIO {
+  port dbi_serve_hmr() = dbi_hmr_served -> dbi_serve_hmr();
+}
+
+component DFSTools {
+  port dft_serve_hfs() = dft_hfs_served -> dft_serve_hfs();
+  port dft_serve_hdf() = dft_hdf_served -> dft_serve_hdf();
+}
+
+component DFSUtils {
+  port dfu_serve_hfs() = dfu_hfs_served -> dfu_serve_hfs();
+  port dfu_serve_hdf() = dfu_hdf_served -> dfu_serve_hdf();
+}
+
+component DataNode {
+  port dno_call_bal() = dno_bal_called -> dno_call_bal();
+  port dno_call_cdp() = dno_cdp_called -> dno_call_cdp();
+  port dno_call_dnp() = dno_dnp_called -> dno_call_dnp();
+  port dno_call_idp() = dno_idp_called -> dno_call_idp();
+  port dno_serve_fds() = dno_fds_served -> dno_serve_fds();
+  port dno_serve_hdf() = dno_hdf_served -> dno_serve_hdf();
+  port dno_serve_ipc() = dno_ipc_served -> dno_serve_ipc();
+}
+
+component DatanodeProtocol {
+  port dnp_serve_dno() = dnp_dno_served -> dnp_serve_dno();
+  port dnp_serve_hdf() = dnp_hdf_served -> dnp_serve_hdf();
+}
+
+component DelegatingMapper {
+  port dlm_serve_hmr() = dlm_hmr_served -> dlm_serve_hmr();
+}
+
+component DistributedFileSystem {
+  port dfs_serve_hfs() = dfs_hfs_served -> dfs_serve_hfs();
+  port dfs_serve_hdf() = dfs_hdf_served -> dfs_serve_hdf();
+}
+
+component DomainDataStructures {
+  port dds_serve_hio() = dds_hio_served -> dds_serve_hio();
+  port dds_serve_rec() = dds_rec_served -> dds_serve_rec();
+}
+
+component FSDataSet {
+  port fds_call_dno() = fds_dno_called -> fds_call_dno();
+  port fds_serve_hdf() = fds_hdf_served -> fds_serve_hdf();
+}
+
+component FSLogging {
+  port fsl_serve_log() = fsl_log_served -> fsl_serve_log();
+}
+
+component Filters {
+  port fil_serve_cnf() = fil_cnf_served -> fil_serve_cnf();
+}
+
+component HDFSUpgradeManagement {
+  port hum_serve_hdf() = hum_hdf_served -> hum_serve_hdf();
+}
+
+component HTTPProtocolAccess {
+  port hpa_serve_hdf() = hpa_hdf_served -> hpa_serve_hdf();
+  port hpa_serve_htp() = hpa_htp_served -> hpa_serve_htp();
+}
+
+component HadoopConf {
+  port cnf_call_fil() = cnf_fil_called -> cnf_call_fil();
+  port cnf_call_hfs() = cnf_hfs_called -> cnf_call_hfs();
+  port cnf_call_htp() = cnf_htp_called -> cnf_call_htp();
+  port cnf_call_hio() = cnf_hio_called -> cnf_call_hio();
+  port cnf_call_ipc() = cnf_ipc_called -> cnf_call_ipc();
+  port cnf_call_log() = cnf_log_called -> cnf_call_log();
+  port cnf_call_hmt() = cnf_hmt_called -> cnf_call_hmt();
+  port cnf_call_hnt() = cnf_hnt_called -> cnf_call_hnt();
+  port cnf_call_rec() = cnf_rec_called -> cnf_call_rec();
+  port cnf_call_sec() = cnf_sec_called -> cnf_call_sec();
+  port cnf_call_utl() = cnf_utl_called -> cnf_call_utl();
+}
+
+component HadoopFilecache {
+  port flc_serve_hfs() = flc_hfs_served -> flc_serve_hfs();
+}
+
+component HadoopFs {
+  port hfs_call_dft() = hfs_dft_called -> hfs_call_dft();
+  port hfs_call_dfu() = hfs_dfu_called -> hfs_call_dfu();
+  port hfs_call_dfs() = hfs_dfs_called -> hfs_call_dfs();
+  port hfs_call_flc() = hfs_flc_called -> hfs_call_flc();
+  port hfs_call_hdf() = hfs_hdf_called -> hfs_call_hdf();
+  port hfs_call_hmr() = hfs_hmr_called -> hfs_call_hmr();
+  port hfs_serve_cnf() = hfs_cnf_served -> hfs_serve_cnf();
+  port hfs_serve_hio() = hfs_hio_served -> hfs_serve_hio();
+}
+
+component HadoopHdfs {
+  port hdf_call_bal() = hdf_bal_called -> hdf_call_bal();
+  port hdf_call_cdp() = hdf_cdp_called -> hdf_call_cdp();
+  port hdf_call_cfe() = hdf_cfe_called -> hdf_call_cfe();
+  port hdf_call_cpr() = hdf_cpr_called -> hdf_call_cpr();
+  port hdf_call_cns() = hdf_cns_called -> hdf_call_cns();
+  port hdf_call_dft() = hdf_dft_called -> hdf_call_dft();
+  port hdf_call_dfu() = hdf_dfu_called -> hdf_call_dfu();
+  port hdf_call_dno() = hdf_dno_called -> hdf_call_dno();
+  port hdf_call_dnp() = hdf_dnp_called -> hdf_call_dnp();
+  port hdf_call_dfs() = hdf_dfs_called -> hdf_call_dfs();
+  port hdf_call_fds() = hdf_fds_called -> hdf_call_fds();
+  port hdf_call_hum() = hdf_hum_called -> hdf_call_hum();
+  port hdf_call_hpa() = hdf_hpa_called -> hdf_call_hpa();
+  port hdf_call_idp() = hdf_idp_called -> hdf_call_idp();
+  port hdf_call_nhp() = hdf_nhp_called -> hdf_call_nhp();
+  port hdf_call_nno() = hdf_nno_called -> hdf_call_nno();
+  port hdf_call_nnp() = hdf_nnp_called -> hdf_call_nnp();
+  port hdf_call_snn() = hdf_snn_called -> hdf_call_snn();
+  port hdf_call_thh() = hdf_thh_called -> hdf_call_thh();
+  port hdf_serve_hfs() = hdf_hfs_served -> hdf_serve_hfs();
+  port hdf_serve_ipc() = hdf_ipc_served -> hdf_serve_ipc();
+  port hdf_serve_sec() = hdf_sec_served -> hdf_serve_sec();
+}
+
+component HadoopHttp {
+  port htp_call_hpa() = htp_hpa_called -> htp_call_hpa();
+  port htp_call_nno() = htp_nno_called -> htp_call_nno();
+  port htp_call_snn() = htp_snn_called -> htp_call_snn();
+  port htp_call_thh() = htp_thh_called -> htp_call_thh();
+  port htp_serve_cnf() = htp_cnf_served -> htp_serve_cnf();
+}
+
+component HadoopIo {
+  port hio_call_con() = hio_con_called -> hio_call_con();
+  port hio_call_dds() = hio_dds_called -> hio_call_dds();
+  port hio_call_hfs() = hio_hfs_called -> hio_call_hfs();
+  port hio_call_hnt() = hio_hnt_called -> hio_call_hnt();
+  port hio_call_rec() = hio_rec_called -> hio_call_rec();
+  port hio_call_ifd() = hio_ifd_called -> hio_call_ifd();
+  port hio_call_opu() = hio_opu_called -> hio_call_opu();
+  port hio_call_otu() = hio_otu_called -> hio_call_otu();
+  port hio_call_pru() = hio_pru_called -> hio_call_pru();
+  port hio_call_sfh() = hio_sfh_called -> hio_call_sfh();
+  port hio_serve_cnf() = hio_cnf_served -> hio_serve_cnf();
+  port hio_serve_utl() = hio_utl_served -> hio_serve_utl();
+}
+
+component HadoopIpc {
+  port ipc_call_dno() = ipc_dno_called -> ipc_call_dno();
+  port ipc_call_hdf() = ipc_hdf_called -> ipc_call_hdf();
+  port ipc_call_hmr() = ipc_hmr_called -> ipc_call_hmr();
+  port ipc_call_nno() = ipc_nno_called -> ipc_call_nno();
+  port ipc_serve_cnf() = ipc_cnf_served -> ipc_serve_cnf();
+  port ipc_serve_hnt() = ipc_hnt_served -> ipc_serve_hnt();
+  port ipc_serve_sec() = ipc_sec_served -> ipc_serve_sec();
+}
+
+component HadoopLog {
+  port log_call_fsl() = log_fsl_called -> log_call_fsl();
+  port log_serve_cnf() = log_cnf_served -> log_serve_cnf();
+}
+
+component HadoopMapred {
+  port hmr_call_cmr() = hmr_cmr_called -> hmr_call_cmr();
+  port hmr_call_cpj() = hmr_cpj_called -> hmr_call_cpj();
+  port hmr_call_cpp() = hmr_cpp_called -> hmr_call_cpp();
+  port hmr_call_dbi() = hmr_dbi_called -> hmr_call_dbi();
+  port hmr_call_dlm() = hmr_dlm_called -> hmr_call_dlm();
+  port hmr_call_jcl() = hmr_jcl_called -> hmr_call_jcl();
+  port hmr_call_jhi() = hmr_jhi_called -> hmr_call_jhi();
+  port hmr_call_jqc() = hmr_jqc_called -> hmr_call_jqc();
+  port hmr_call_jsh() = hmr_jsh_called -> hmr_call_jsh();
+  port hmr_call_jtk() = hmr_jtk_called -> hmr_call_jtk();
+  port hmr_call_jnu() = hmr_jnu_called -> hmr_call_jnu();
+  port hmr_call_jvm() = hmr_jvm_called -> hmr_call_jvm();
+  port hmr_call_kfp() = hmr_kfp_called -> hmr_call_kfp();
+  port hmr_call_mrc() = hmr_mrc_called -> hmr_call_mrc();
+  port hmr_call_mru() = hmr_mru_called -> hmr_call_mru();
+  port hmr_call_mof() = hmr_mof_called -> hmr_call_mof();
+  port hmr_call_tds() = hmr_tds_called -> hmr_call_tds();
+  port hmr_call_ttr() = hmr_ttr_called -> hmr_call_ttr();
+  port hmr_call_top() = hmr_top_called -> hmr_call_top();
+  port hmr_call_tkp() = hmr_tkp_called -> hmr_call_tkp();
+  port hmr_call_vag() = hmr_vag_called -> hmr_call_vag();
+  port hmr_serve_hfs() = hmr_hfs_served -> hmr_serve_hfs();
+  port hmr_serve_ipc() = hmr_ipc_served -> hmr_serve_ipc();
+  port hmr_serve_sec() = hmr_sec_served -> hmr_serve_sec();
+}
+
+component HadoopMetrics {
+  port hmt_call_jtk() = hmt_jtk_called -> hmt_call_jtk();
+  port hmt_call_mtr() = hmt_mtr_called -> hmt_call_mtr();
+  port hmt_call_nno() = hmt_nno_called -> hmt_call_nno();
+  port hmt_serve_cnf() = hmt_cnf_served -> hmt_serve_cnf();
+}
+
+component HadoopNet {
+  port hnt_call_ipc() = hnt_ipc_called -> hnt_call_ipc();
+  port hnt_call_nwu() = hnt_nwu_called -> hnt_call_nwu();
+  port hnt_serve_cnf() = hnt_cnf_served -> hnt_serve_cnf();
+  port hnt_serve_hio() = hnt_hio_served -> hnt_serve_hio();
+}
+
+component HadoopRecord {
+  port rec_call_dds() = rec_dds_called -> rec_call_dds();
+  port rec_serve_cnf() = rec_cnf_served -> rec_serve_cnf();
+  port rec_serve_hio() = rec_hio_served -> rec_serve_hio();
+}
+
+component HadoopSecurity {
+  port sec_call_hdf() = sec_hdf_called -> sec_call_hdf();
+  port sec_call_ipc() = sec_ipc_called -> sec_call_ipc();
+  port sec_call_hmr() = sec_hmr_called -> sec_call_hmr();
+  port sec_call_nno() = sec_nno_called -> sec_call_nno();
+  port sec_call_sds() = sec_sds_called -> sec_call_sds();
+  port sec_serve_cnf() = sec_cnf_served -> sec_serve_cnf();
+}
+
+component HadoopUtil {
+  port utl_call_hio() = utl_hio_called -> utl_call_hio();
+  port utl_call_prg() = utl_prg_called -> utl_call_prg();
+  port utl_serve_cnf() = utl_cnf_served -> utl_serve_cnf();
+}
+
+component InputFormatDataStructures {
+  port ifd_serve_hio() = ifd_hio_served -> ifd_serve_hio();
+}
+
+component InterDataNodeProtocol {
+  port idp_serve_dno() = idp_dno_served -> idp_serve_dno();
+  port idp_serve_hdf() = idp_hdf_served -> idp_serve_hdf();
+}
+
+component JobClient {
+  port jcl_call_jsh() = jcl_jsh_called -> jcl_call_jsh();
+  port jcl_serve_hmr() = jcl_hmr_served -> jcl_serve_hmr();
+}
+
+component JobHistory {
+  port jhi_serve_hmr() = jhi_hmr_served -> jhi_serve_hmr();
+}
+
+component JobQueueClient {
+  port jqc_serve_hmr() = jqc_hmr_served -> jqc_serve_hmr();
+}
+
+component JobShell {
+  port jsh_serve_hmr() = jsh_hmr_served -> jsh_serve_hmr();
+  port jsh_serve_jcl() = jsh_jcl_served -> jsh_serve_jcl();
+}
+
+component JobTracking {
+  port jtk_serve_hmr() = jtk_hmr_served -> jtk_serve_hmr();
+  port jtk_serve_hmt() = jtk_hmt_served -> jtk_serve_hmt();
+}
+
+component JoinUtilities {
+  port jnu_serve_hmr() = jnu_hmr_served -> jnu_serve_hmr();
+}
+
+component JvmManager {
+  port jvm_serve_hmr() = jvm_hmr_served -> jvm_serve_hmr();
+  port jvm_serve_ttr() = jvm_ttr_served -> jvm_serve_ttr();
+}
+
+component KeyFieldBasedPartitioner {
+  port kfp_serve_hmr() = kfp_hmr_served -> kfp_serve_hmr();
+}
+
+component MapredClient {
+  port mrc_serve_hmr() = mrc_hmr_served -> mrc_serve_hmr();
+}
+
+component MapredUtilities {
+  port mru_serve_hmr() = mru_hmr_served -> mru_serve_hmr();
+}
+
+component Metrics {
+  port mtr_serve_hmt() = mtr_hmt_served -> mtr_serve_hmt();
+}
+
+component MultipleOutputFormatting {
+  port mof_serve_hmr() = mof_hmr_served -> mof_serve_hmr();
+}
+
+component NameNodeHDFSProtocolCore {
+  port nhp_serve_hdf() = nhp_hdf_served -> nhp_serve_hdf();
+  port nhp_serve_nno() = nhp_nno_served -> nhp_serve_nno();
+}
+
+component Namenode {
+  port nno_call_bal() = nno_bal_called -> nno_call_bal();
+  port nno_call_cns() = nno_cns_called -> nno_call_cns();
+  port nno_call_nhp() = nno_nhp_called -> nno_call_nhp();
+  port nno_call_nnp() = nno_nnp_called -> nno_call_nnp();
+  port nno_call_snn() = nno_snn_called -> nno_call_snn();
+  port nno_serve_hdf() = nno_hdf_served -> nno_serve_hdf();
+  port nno_serve_htp() = nno_htp_served -> nno_serve_htp();
+  port nno_serve_ipc() = nno_ipc_served -> nno_serve_ipc();
+  port nno_serve_hmt() = nno_hmt_served -> nno_serve_hmt();
+  port nno_serve_sec() = nno_sec_served -> nno_serve_sec();
+}
+
+component NamenodeProtocol {
+  port nnp_serve_hdf() = nnp_hdf_served -> nnp_serve_hdf();
+  port nnp_serve_nno() = nnp_nno_served -> nnp_serve_nno();
+}
+
+component NetworkUtilities {
+  port nwu_serve_hnt() = nwu_hnt_served -> nwu_serve_hnt();
+}
+
+component OrphanedProtocolUtilities {
+  port opu_serve_hio() = opu_hio_served -> opu_serve_hio();
+}
+
+component OtherUtilities {
+  port otu_serve_hio() = otu_hio_served -> otu_serve_hio();
+}
+
+component Progress {
+  port prg_serve_utl() = prg_utl_served -> prg_serve_utl();
+}
+
+component ProtocolUtilities {
+  port pru_serve_hio() = pru_hio_served -> pru_serve_hio();
+}
+
+component SecondaryNameNode {
+  port snn_serve_hdf() = snn_hdf_served -> snn_serve_hdf();
+  port snn_serve_htp() = snn_htp_served -> snn_serve_htp();
+  port snn_serve_nno() = snn_nno_served -> snn_serve_nno();
+}
+
+component SecurityDataStructures {
+  port sds_serve_sec() = sds_sec_served -> sds_serve_sec();
+}
+
+component SequenceFileHandling {
+  port sfh_serve_hio() = sfh_hio_served -> sfh_serve_hio();
+}
+
+component TaskDataStorage {
+  port tds_serve_hmr() = tds_hmr_served -> tds_serve_hmr();
+}
+
+component TaskTrackingAndRunning {
+  port ttr_call_jvm() = ttr_jvm_called -> ttr_call_jvm();
+  port ttr_serve_hmr() = ttr_hmr_served -> ttr_serve_hmr();
+}
+
+component TotalOrderPartitioner {
+  port top_serve_hmr() = top_hmr_served -> top_serve_hmr();
+}
+
+component TrackerProtocols {
+  port tkp_serve_hmr() = tkp_hmr_served -> tkp_serve_hmr();
+}
+
+component TransferHDFSoverHTTP {
+  port thh_serve_hdf() = thh_hdf_served -> thh_serve_hdf();
+  port thh_serve_htp() = thh_htp_served -> thh_serve_htp();
+}
+
+component ValueAggregator {
+  port vag_serve_hmr() = vag_hmr_served -> vag_serve_hmr();
+}
+
+system hadoop {
+
+  declare dno_to_bal = CSConnector;
+  declare dno_to_cdp = CSConnector;
+  declare dno_to_dnp = CSConnector;
+  declare dno_to_idp = CSConnector;
+  declare fds_to_dno = CSConnector;
+  declare cnf_to_fil = CSConnector;
+  declare cnf_to_hfs = CSConnector;
+  declare cnf_to_htp = CSConnector;
+  declare cnf_to_hio = CSConnector;
+  declare cnf_to_ipc = CSConnector;
+  declare cnf_to_log = CSConnector;
+  declare cnf_to_hmt = CSConnector;
+  declare cnf_to_hnt = CSConnector;
+  declare cnf_to_rec = CSConnector;
+  declare cnf_to_sec = CSConnector;
+  declare cnf_to_utl = CSConnector;
+  declare hfs_to_dft = CSConnector;
+  declare hfs_to_dfu = CSConnector;
+  declare hfs_to_dfs = CSConnector;
+  declare hfs_to_flc = CSConnector;
+  declare hfs_to_hdf = CSConnector;
+  declare hfs_to_hmr = CSConnector;
+  declare hdf_to_bal = CSConnector;
+  declare hdf_to_cdp = CSConnector;
+  declare hdf_to_cfe = CSConnector;
+  declare hdf_to_cpr = CSConnector;
+  declare hdf_to_cns = CSConnector;
+  declare hdf_to_dno = CSConnector;
+  declare hdf_to_dnp = CSConnector;
+  declare hdf_to_dft = CSConnector;
+  declare hdf_to_dfu = CSConnector;
+  declare hdf_to_dfs = CSConnector;
+  declare hdf_to_fds = CSConnector;
+  declare hdf_to_hum = CSConnector;
+  declare hdf_to_hpa = CSConnector;
+  declare hdf_to_idp = CSConnector;
+  declare hdf_to_nno = CSConnector;
+  declare hdf_to_nnp = CSConnector;
+  declare hdf_to_nhp = CSConnector;
+  declare hdf_to_snn = CSConnector;
+  declare hdf_to_thh = CSConnector;
+  declare htp_to_hpa = CSConnector;
+  declare htp_to_nno = CSConnector;
+  declare htp_to_snn = CSConnector;
+  declare htp_to_thh = CSConnector;
+  declare hio_to_con = CSConnector;
+  declare hio_to_dds = CSConnector;
+  declare hio_to_hfs = CSConnector;
+  declare hio_to_hnt = CSConnector;
+  declare hio_to_rec = CSConnector;
+  declare hio_to_ifd = CSConnector;
+  declare hio_to_opu = CSConnector;
+  declare hio_to_otu = CSConnector;
+  declare hio_to_pru = CSConnector;
+  declare hio_to_sfh = CSConnector;
+  declare ipc_to_dno = CSConnector;
+  declare ipc_to_hdf = CSConnector;
+  declare ipc_to_hmr = CSConnector;
+  declare ipc_to_nno = CSConnector;
+  declare log_to_fsl = CSConnector;
+  declare hmr_to_cmr = CSConnector;
+  declare hmr_to_cpj = CSConnector;
+  declare hmr_to_cpp = CSConnector;
+  declare hmr_to_dbi = CSConnector;
+  declare hmr_to_dlm = CSConnector;
+  declare hmr_to_jcl = CSConnector;
+  declare hmr_to_jhi = CSConnector;
+  declare hmr_to_jqc = CSConnector;
+  declare hmr_to_jsh = CSConnector;
+  declare hmr_to_jtk = CSConnector;
+  declare hmr_to_jnu = CSConnector;
+  declare hmr_to_jvm = CSConnector;
+  declare hmr_to_kfp = CSConnector;
+  declare hmr_to_mrc = CSConnector;
+  declare hmr_to_mru = CSConnector;
+  declare hmr_to_mof = CSConnector;
+  declare hmr_to_tds = CSConnector;
+  declare hmr_to_ttr = CSConnector;
+  declare hmr_to_top = CSConnector;
+  declare hmr_to_tkp = CSConnector;
+  declare hmr_to_vag = CSConnector;
+  declare hmt_to_jtk = CSConnector;
+  declare hmt_to_mtr = CSConnector;
+  declare hmt_to_nno = CSConnector;
+  declare hnt_to_ipc = CSConnector;
+  declare hnt_to_nwu = CSConnector;
+  declare rec_to_dds = CSConnector;
+  declare sec_to_hdf = CSConnector;
+  declare sec_to_ipc = CSConnector;
+  declare sec_to_hmr = CSConnector;
+  declare sec_to_nno = CSConnector;
+  declare sec_to_sds = CSConnector;
+  declare utl_to_hio = CSConnector;
+  declare utl_to_prg = CSConnector;
+  declare jcl_to_jsh = CSConnector;
+  declare nno_to_bal = CSConnector;
+  declare nno_to_cns = CSConnector;
+  declare nno_to_nnp = CSConnector;
+  declare nno_to_nhp = CSConnector;
+  declare nno_to_snn = CSConnector;
+  declare ttr_to_jvm = CSConnector;
+
+  attach DataNode.dno_call_bal() = dno_to_bal.requester(1);
+  attach Balancer.bal_serve_dno() = dno_to_bal.responder();
+  attach DataNode.dno_call_cdp() = dno_to_cdp.requester(2);
+  attach ClientDatanodeProtocol.cdp_serve_dno() = dno_to_cdp.responder();
+  attach DataNode.dno_call_dnp() = dno_to_dnp.requester(3);
+  attach DatanodeProtocol.dnp_serve_dno() = dno_to_dnp.responder();
+  attach DataNode.dno_call_idp() = dno_to_idp.requester(4);
+  attach InterDataNodeProtocol.idp_serve_dno() = dno_to_idp.responder();
+  attach FSDataSet.fds_call_dno() = fds_to_dno.requester(5);
+  attach DataNode.dno_serve_fds() = fds_to_dno.responder();
+  attach HadoopConf.cnf_call_fil() = cnf_to_fil.requester(6);
+  attach Filters.fil_serve_cnf() = cnf_to_fil.responder();
+  attach HadoopConf.cnf_call_hfs() = cnf_to_hfs.requester(7);
+  attach HadoopFs.hfs_serve_cnf() = cnf_to_hfs.responder();
+  attach HadoopConf.cnf_call_htp() = cnf_to_htp.requester(8);
+  attach HadoopHttp.htp_serve_cnf() = cnf_to_htp.responder();
+  attach HadoopConf.cnf_call_hio() = cnf_to_hio.requester(9);
+  attach HadoopIo.hio_serve_cnf() = cnf_to_hio.responder();
+  attach HadoopConf.cnf_call_ipc() = cnf_to_ipc.requester(10);
+  attach HadoopIpc.ipc_serve_cnf() = cnf_to_ipc.responder();
+  attach HadoopConf.cnf_call_log() = cnf_to_log.requester(11);
+  attach HadoopLog.log_serve_cnf() = cnf_to_log.responder();
+  attach HadoopConf.cnf_call_hmt() = cnf_to_hmt.requester(12);
+  attach HadoopMetrics.hmt_serve_cnf() = cnf_to_hmt.responder();
+  attach HadoopConf.cnf_call_hnt() = cnf_to_hnt.requester(13);
+  attach HadoopNet.hnt_serve_cnf() = cnf_to_hnt.responder();
+  attach HadoopConf.cnf_call_rec() = cnf_to_rec.requester(14);
+  attach HadoopRecord.rec_serve_cnf() = cnf_to_rec.responder();
+  attach HadoopConf.cnf_call_sec() = cnf_to_sec.requester(15);
+  attach HadoopSecurity.sec_serve_cnf() = cnf_to_sec.responder();
+  attach HadoopConf.cnf_call_utl() = cnf_to_utl.requester(16);
+  attach HadoopUtil.utl_serve_cnf() = cnf_to_utl.responder();
+  attach HadoopFs.hfs_call_dft() = hfs_to_dft.requester(17);
+  attach DFSTools.dft_serve_hfs() = hfs_to_dft.responder();
+  attach HadoopFs.hfs_call_dfu() = hfs_to_dfu.requester(18);
+  attach DFSUtils.dfu_serve_hfs() = hfs_to_dfu.responder();
+  attach HadoopFs.hfs_call_dfs() = hfs_to_dfs.requester(19);
+  attach DistributedFileSystem.dfs_serve_hfs() = hfs_to_dfs.responder();
+  attach HadoopFs.hfs_call_flc() = hfs_to_flc.requester(20);
+  attach HadoopFilecache.flc_serve_hfs() = hfs_to_flc.responder();
+  attach HadoopFs.hfs_call_hdf() = hfs_to_hdf.requester(21);
+  attach HadoopHdfs.hdf_serve_hfs() = hfs_to_hdf.responder();
+  attach HadoopFs.hfs_call_hmr() = hfs_to_hmr.requester(22);
+  attach HadoopMapred.hmr_serve_hfs() = hfs_to_hmr.responder();
+  attach HadoopHdfs.hdf_call_bal() = hdf_to_bal.requester(23);
+  attach Balancer.bal_serve_hdf() = hdf_to_bal.responder();
+  attach HadoopHdfs.hdf_call_cdp() = hdf_to_cdp.requester(24);
+  attach ClientDatanodeProtocol.cdp_serve_hdf() = hdf_to_cdp.responder();
+  attach HadoopHdfs.hdf_call_cfe() = hdf_to_cfe.requester(25);
+  attach ClientFacingExceptions.cfe_serve_hdf() = hdf_to_cfe.responder();
+  attach HadoopHdfs.hdf_call_cpr() = hdf_to_cpr.requester(26);
+  attach ClientProtocol.cpr_serve_hdf() = hdf_to_cpr.responder();
+  attach HadoopHdfs.hdf_call_cns() = hdf_to_cns.requester(27);
+  attach CoreNameNodeStructures.cns_serve_hdf() = hdf_to_cns.responder();
+  attach HadoopHdfs.hdf_call_dno() = hdf_to_dno.requester(28);
+  attach DataNode.dno_serve_hdf() = hdf_to_dno.responder();
+  attach HadoopHdfs.hdf_call_dnp() = hdf_to_dnp.requester(29);
+  attach DatanodeProtocol.dnp_serve_hdf() = hdf_to_dnp.responder();
+  attach HadoopHdfs.hdf_call_dft() = hdf_to_dft.requester(30);
+  attach DFSTools.dft_serve_hdf() = hdf_to_dft.responder();
+  attach HadoopHdfs.hdf_call_dfu() = hdf_to_dfu.requester(31);
+  attach DFSUtils.dfu_serve_hdf() = hdf_to_dfu.responder();
+  attach HadoopHdfs.hdf_call_dfs() = hdf_to_dfs.requester(32);
+  attach DistributedFileSystem.dfs_serve_hdf() = hdf_to_dfs.responder();
+  attach HadoopHdfs.hdf_call_fds() = hdf_to_fds.requester(33);
+  attach FSDataSet.fds_serve_hdf() = hdf_to_fds.responder();
+  attach HadoopHdfs.hdf_call_hum() = hdf_to_hum.requester(34);
+  attach HDFSUpgradeManagement.hum_serve_hdf() = hdf_to_hum.responder();
+  attach HadoopHdfs.hdf_call_hpa() = hdf_to_hpa.requester(35);
+  attach HTTPProtocolAccess.hpa_serve_hdf() = hdf_to_hpa.responder();
+  attach HadoopHdfs.hdf_call_idp() = hdf_to_idp.requester(36);
+  attach InterDataNodeProtocol.idp_serve_hdf() = hdf_to_idp.responder();
+  attach HadoopHdfs.hdf_call_nno() = hdf_to_nno.requester(37);
+  attach Namenode.nno_serve_hdf() = hdf_to_nno.responder();
+  attach HadoopHdfs.hdf_call_nnp() = hdf_to_nnp.requester(38);
+  attach NamenodeProtocol.nnp_serve_hdf() = hdf_to_nnp.responder();
+  attach HadoopHdfs.hdf_call_nhp() = hdf_to_nhp.requester(39);
+  attach NameNodeHDFSProtocolCore.nhp_serve_hdf() = hdf_to_nhp.responder();
+  attach HadoopHdfs.hdf_call_snn() = hdf_to_snn.requester(40);
+  attach SecondaryNameNode.snn_serve_hdf() = hdf_to_snn.responder();
+  attach HadoopHdfs.hdf_call_thh() = hdf_to_thh.requester(41);
+  attach TransferHDFSoverHTTP.thh_serve_hdf() = hdf_to_thh.responder();
+  attach HadoopHttp.htp_call_hpa() = htp_to_hpa.requester(42);
+  attach HTTPProtocolAccess.hpa_serve_htp() = htp_to_hpa.responder();
+  attach HadoopHttp.htp_call_nno() = htp_to_nno.requester(43);
+  attach Namenode.nno_serve_htp() = htp_to_nno.responder();
+  attach HadoopHttp.htp_call_snn() = htp_to_snn.requester(44);
+  attach SecondaryNameNode.snn_serve_htp() = htp_to_snn.responder();
+  attach HadoopHttp.htp_call_thh() = htp_to_thh.requester(45);
+  attach TransferHDFSoverHTTP.thh_serve_htp() = htp_to_thh.responder();
+  attach HadoopIo.hio_call_con() = hio_to_con.requester(46);
+  attach Connectors.con_serve_hio() = hio_to_con.responder();
+  attach HadoopIo.hio_call_dds() = hio_to_dds.requester(47);
+  attach DomainDataStructures.dds_serve_hio() = hio_to_dds.responder();
+  attach HadoopIo.hio_call_hfs() = hio_to_hfs.requester(48);
+  attach HadoopFs.hfs_serve_hio() = hio_to_hfs.responder();
+  attach HadoopIo.hio_call_hnt() = hio_to_hnt.requester(49);
+  attach HadoopNet.hnt_serve_hio() = hio_to_hnt.responder();
+  attach HadoopIo.hio_call_rec() = hio_to_rec.requester(50);
+  attach HadoopRecord.rec_serve_hio() = hio_to_rec.responder();
+  attach HadoopIo.hio_call_ifd() = hio_to_ifd.requester(51);
+  attach InputFormatDataStructures.ifd_serve_hio() = hio_to_ifd.responder();
+  attach HadoopIo.hio_call_opu() = hio_to_opu.requester(52);
+  attach OrphanedProtocolUtilities.opu_serve_hio() = hio_to_opu.responder();
+  attach HadoopIo.hio_call_otu() = hio_to_otu.requester(53);
+  attach OtherUtilities.otu_serve_hio() = hio_to_otu.responder();
+  attach HadoopIo.hio_call_pru() = hio_to_pru.requester(54);
+  attach ProtocolUtilities.pru_serve_hio() = hio_to_pru.responder();
+  attach HadoopIo.hio_call_sfh() = hio_to_sfh.requester(55);
+  attach SequenceFileHandling.sfh_serve_hio() = hio_to_sfh.responder();
+  attach HadoopIpc.ipc_call_dno() = ipc_to_dno.requester(56);
+  attach DataNode.dno_serve_ipc() = ipc_to_dno.responder();
+  attach HadoopIpc.ipc_call_hdf() = ipc_to_hdf.requester(57);
+  attach HadoopHdfs.hdf_serve_ipc() = ipc_to_hdf.responder();
+  attach HadoopIpc.ipc_call_hmr() = ipc_to_hmr.requester(58);
+  attach HadoopMapred.hmr_serve_ipc() = ipc_to_hmr.responder();
+  attach HadoopIpc.ipc_call_nno() = ipc_to_nno.requester(59);
+  attach Namenode.nno_serve_ipc() = ipc_to_nno.responder();
+  attach HadoopLog.log_call_fsl() = log_to_fsl.requester(60);
+  attach FSLogging.fsl_serve_log() = log_to_fsl.responder();
+  attach HadoopMapred.hmr_call_cmr() = hmr_to_cmr.requester(61);
+  attach ChainMapReduce.cmr_serve_hmr() = hmr_to_cmr.responder();
+  attach HadoopMapred.hmr_call_cpj() = hmr_to_cpj.requester(62);
+  attach CppPipesJob.cpj_serve_hmr() = hmr_to_cpj.responder();
+  attach HadoopMapred.hmr_call_cpp() = hmr_to_cpp.requester(63);
+  attach CppPipesProtocol.cpp_serve_hmr() = hmr_to_cpp.responder();
+  attach HadoopMapred.hmr_call_dbi() = hmr_to_dbi.requester(64);
+  attach DBIO.dbi_serve_hmr() = hmr_to_dbi.responder();
+  attach HadoopMapred.hmr_call_dlm() = hmr_to_dlm.requester(65);
+  attach DelegatingMapper.dlm_serve_hmr() = hmr_to_dlm.responder();
+  attach HadoopMapred.hmr_call_jcl() = hmr_to_jcl.requester(66);
+  attach JobClient.jcl_serve_hmr() = hmr_to_jcl.responder();
+  attach HadoopMapred.hmr_call_jhi() = hmr_to_jhi.requester(67);
+  attach JobHistory.jhi_serve_hmr() = hmr_to_jhi.responder();
+  attach HadoopMapred.hmr_call_jqc() = hmr_to_jqc.requester(68);
+  attach JobQueueClient.jqc_serve_hmr() = hmr_to_jqc.responder();
+  attach HadoopMapred.hmr_call_jsh() = hmr_to_jsh.requester(69);
+  attach JobShell.jsh_serve_hmr() = hmr_to_jsh.responder();
+  attach HadoopMapred.hmr_call_jtk() = hmr_to_jtk.requester(70);
+  attach JobTracking.jtk_serve_hmr() = hmr_to_jtk.responder();
+  attach HadoopMapred.hmr_call_jnu() = hmr_to_jnu.requester(71);
+  attach JoinUtilities.jnu_serve_hmr() = hmr_to_jnu.responder();
+  attach HadoopMapred.hmr_call_jvm() = hmr_to_jvm.requester(72);
+  attach JvmManager.jvm_serve_hmr() = hmr_to_jvm.responder();
+  attach HadoopMapred.hmr_call_kfp() = hmr_to_kfp.requester(73);
+  attach KeyFieldBasedPartitioner.kfp_serve_hmr() = hmr_to_kfp.responder();
+  attach HadoopMapred.hmr_call_mrc() = hmr_to_mrc.requester(74);
+  attach MapredClient.mrc_serve_hmr() = hmr_to_mrc.responder();
+  attach HadoopMapred.hmr_call_mru() = hmr_to_mru.requester(75);
+  attach MapredUtilities.mru_serve_hmr() = hmr_to_mru.responder();
+  attach HadoopMapred.hmr_call_mof() = hmr_to_mof.requester(76);
+  attach MultipleOutputFormatting.mof_serve_hmr() = hmr_to_mof.responder();
+  attach HadoopMapred.hmr_call_tds() = hmr_to_tds.requester(77);
+  attach TaskDataStorage.tds_serve_hmr() = hmr_to_tds.responder();
+  attach HadoopMapred.hmr_call_ttr() = hmr_to_ttr.requester(78);
+  attach TaskTrackingAndRunning.ttr_serve_hmr() = hmr_to_ttr.responder();
+  attach HadoopMapred.hmr_call_top() = hmr_to_top.requester(79);
+  attach TotalOrderPartitioner.top_serve_hmr() = hmr_to_top.responder();
+  attach HadoopMapred.hmr_call_tkp() = hmr_to_tkp.requester(80);
+  attach TrackerProtocols.tkp_serve_hmr() = hmr_to_tkp.responder();
+  attach HadoopMapred.hmr_call_vag() = hmr_to_vag.requester(81);
+  attach ValueAggregator.vag_serve_hmr() = hmr_to_vag.responder();
+  attach HadoopMetrics.hmt_call_jtk() = hmt_to_jtk.requester(82);
+  attach JobTracking.jtk_serve_hmt() = hmt_to_jtk.responder();
+  attach HadoopMetrics.hmt_call_mtr() = hmt_to_mtr.requester(83);
+  attach Metrics.mtr_serve_hmt() = hmt_to_mtr.responder();
+  attach HadoopMetrics.hmt_call_nno() = hmt_to_nno.requester(84);
+  attach Namenode.nno_serve_hmt() = hmt_to_nno.responder();
+  attach HadoopNet.hnt_call_ipc() = hnt_to_ipc.requester(85);
+  attach HadoopIpc.ipc_serve_hnt() = hnt_to_ipc.responder();
+  attach HadoopNet.hnt_call_nwu() = hnt_to_nwu.requester(86);
+  attach NetworkUtilities.nwu_serve_hnt() = hnt_to_nwu.responder();
+  attach HadoopRecord.rec_call_dds() = rec_to_dds.requester(87);
+  attach DomainDataStructures.dds_serve_rec() = rec_to_dds.responder();
+  attach HadoopSecurity.sec_call_hdf() = sec_to_hdf.requester(88);
+  attach HadoopHdfs.hdf_serve_sec() = sec_to_hdf.responder();
+  attach HadoopSecurity.sec_call_ipc() = sec_to_ipc.requester(89);
+  attach HadoopIpc.ipc_serve_sec() = sec_to_ipc.responder();
+  attach HadoopSecurity.sec_call_hmr() = sec_to_hmr.requester(90);
+  attach HadoopMapred.hmr_serve_sec() = sec_to_hmr.responder();
+  attach HadoopSecurity.sec_call_nno() = sec_to_nno.requester(91);
+  attach Namenode.nno_serve_sec() = sec_to_nno.responder();
+  attach HadoopSecurity.sec_call_sds() = sec_to_sds.requester(92);
+  attach SecurityDataStructures.sds_serve_sec() = sec_to_sds.responder();
+  attach HadoopUtil.utl_call_hio() = utl_to_hio.requester(93);
+  attach HadoopIo.hio_serve_utl() = utl_to_hio.responder();
+  attach HadoopUtil.utl_call_prg() = utl_to_prg.requester(94);
+  attach Progress.prg_serve_utl() = utl_to_prg.responder();
+  attach JobClient.jcl_call_jsh() = jcl_to_jsh.requester(95);
+  attach JobShell.jsh_serve_jcl() = jcl_to_jsh.responder();
+  attach Namenode.nno_call_bal() = nno_to_bal.requester(96);
+  attach Balancer.bal_serve_nno() = nno_to_bal.responder();
+  attach Namenode.nno_call_cns() = nno_to_cns.requester(97);
+  attach CoreNameNodeStructures.cns_serve_nno() = nno_to_cns.responder();
+  attach Namenode.nno_call_nnp() = nno_to_nnp.requester(98);
+  attach NamenodeProtocol.nnp_serve_nno() = nno_to_nnp.responder();
+  attach Namenode.nno_call_nhp() = nno_to_nhp.requester(99);
+  attach NameNodeHDFSProtocolCore.nhp_serve_nno() = nno_to_nhp.responder();
+  attach Namenode.nno_call_snn() = nno_to_snn.requester(100);
+  attach SecondaryNameNode.snn_serve_nno() = nno_to_snn.responder();
+  attach TaskTrackingAndRunning.ttr_call_jvm() = ttr_to_jvm.requester(101);
+  attach JvmManager.jvm_serve_ttr() = ttr_to_jvm.responder();
+
+  execute Balancer.bal_serve_dno() || Balancer.bal_serve_hdf() || Balancer.bal_serve_nno() || ChainMapReduce.cmr_serve_hmr() || ClientDatanodeProtocol.cdp_serve_dno() || ClientDatanodeProtocol.cdp_serve_hdf() || ClientFacingExceptions.cfe_serve_hdf() || ClientProtocol.cpr_serve_hdf() || Connectors.con_serve_hio() || CoreNameNodeStructures.cns_serve_hdf() || CoreNameNodeStructures.cns_serve_nno() || CppPipesJob.cpj_serve_hmr() || CppPipesProtocol.cpp_serve_hmr() || DBIO.dbi_serve_hmr() || DFSTools.dft_serve_hfs() || DFSTools.dft_serve_hdf() || DFSUtils.dfu_serve_hfs() || DFSUtils.dfu_serve_hdf() || DataNode.dno_call_bal() || DataNode.dno_call_cdp() || DataNode.dno_call_dnp() || DataNode.dno_call_idp() || DataNode.dno_serve_fds() || DataNode.dno_serve_hdf() || DataNode.dno_serve_ipc() || DatanodeProtocol.dnp_serve_dno() || DatanodeProtocol.dnp_serve_hdf() || DelegatingMapper.dlm_serve_hmr() || DistributedFileSystem.dfs_serve_hfs() || DistributedFileSystem.dfs_serve_hdf() || DomainDataStructures.dds_serve_hio() || DomainDataStructures.dds_serve_rec() || FSDataSet.fds_call_dno() || FSDataSet.fds_serve_hdf() || FSLogging.fsl_serve_log() || Filters.fil_serve_cnf() || HDFSUpgradeManagement.hum_serve_hdf() || HTTPProtocolAccess.hpa_serve_hdf() || HTTPProtocolAccess.hpa_serve_htp() || HadoopConf.cnf_call_fil() || HadoopConf.cnf_call_hfs() || HadoopConf.cnf_call_htp() || HadoopConf.cnf_call_hio() || HadoopConf.cnf_call_ipc() || HadoopConf.cnf_call_log() || HadoopConf.cnf_call_hmt() || HadoopConf.cnf_call_hnt() || HadoopConf.cnf_call_rec() || HadoopConf.cnf_call_sec() || HadoopConf.cnf_call_utl() || HadoopFilecache.flc_serve_hfs() || HadoopFs.hfs_call_dft() || HadoopFs.hfs_call_dfu() || HadoopFs.hfs_call_dfs() || HadoopFs.hfs_call_flc() || HadoopFs.hfs_call_hdf() || HadoopFs.hfs_call_hmr() || HadoopFs.hfs_serve_cnf() || HadoopFs.hfs_serve_hio() || HadoopHdfs.hdf_call_bal() || HadoopHdfs.hdf_call_cdp() || HadoopHdfs.hdf_call_cfe() || HadoopHdfs.hdf_call_cpr() || HadoopHdfs.hdf_call_cns() || HadoopHdfs.hdf_call_dft() || HadoopHdfs.hdf_call_dfu() || HadoopHdfs.hdf_call_dno() || HadoopHdfs.hdf_call_dnp() || HadoopHdfs.hdf_call_dfs() || HadoopHdfs.hdf_call_fds() || HadoopHdfs.hdf_call_hum() || HadoopHdfs.hdf_call_hpa() || HadoopHdfs.hdf_call_idp() || HadoopHdfs.hdf_call_nhp() || HadoopHdfs.hdf_call_nno() || HadoopHdfs.hdf_call_nnp() || HadoopHdfs.hdf_call_snn() || HadoopHdfs.hdf_call_thh() || HadoopHdfs.hdf_serve_hfs() || HadoopHdfs.hdf_serve_ipc() || HadoopHdfs.hdf_serve_sec() || HadoopHttp.htp_call_hpa() || HadoopHttp.htp_call_nno() || HadoopHttp.htp_call_snn() || HadoopHttp.htp_call_thh() || HadoopHttp.htp_serve_cnf() || HadoopIo.hio_call_con() || HadoopIo.hio_call_dds() || HadoopIo.hio_call_hfs() || HadoopIo.hio_call_hnt() || HadoopIo.hio_call_rec() || HadoopIo.hio_call_ifd() || HadoopIo.hio_call_opu() || HadoopIo.hio_call_otu() || HadoopIo.hio_call_pru() || HadoopIo.hio_call_sfh() || HadoopIo.hio_serve_cnf() || HadoopIo.hio_serve_utl() || HadoopIpc.ipc_call_dno() || HadoopIpc.ipc_call_hdf() || HadoopIpc.ipc_call_hmr() || HadoopIpc.ipc_call_nno() || HadoopIpc.ipc_serve_cnf() || HadoopIpc.ipc_serve_hnt() || HadoopIpc.ipc_serve_sec() || HadoopLog.log_call_fsl() || HadoopLog.log_serve_cnf() || HadoopMapred.hmr_call_cmr() || HadoopMapred.hmr_call_cpj() || HadoopMapred.hmr_call_cpp() || HadoopMapred.hmr_call_dbi() || HadoopMapred.hmr_call_dlm() || HadoopMapred.hmr_call_jcl() || HadoopMapred.hmr_call_jhi() || HadoopMapred.hmr_call_jqc() || HadoopMapred.hmr_call_jsh() || HadoopMapred.hmr_call_jtk() || HadoopMapred.hmr_call_jnu() || HadoopMapred.hmr_call_jvm() || HadoopMapred.hmr_call_kfp() || HadoopMapred.hmr_call_mrc() || HadoopMapred.hmr_call_mru() || HadoopMapred.hmr_call_mof() || HadoopMapred.hmr_call_tds() || HadoopMapred.hmr_call_ttr() || HadoopMapred.hmr_call_top() || HadoopMapred.hmr_call_tkp() || HadoopMapred.hmr_call_vag() || HadoopMapred.hmr_serve_hfs() || HadoopMapred.hmr_serve_ipc() || HadoopMapred.hmr_serve_sec() || HadoopMetrics.hmt_call_jtk() || HadoopMetrics.hmt_call_mtr() || HadoopMetrics.hmt_call_nno() || HadoopMetrics.hmt_serve_cnf() || HadoopNet.hnt_call_ipc() || HadoopNet.hnt_call_nwu() || HadoopNet.hnt_serve_cnf() || HadoopNet.hnt_serve_hio() || HadoopRecord.rec_call_dds() || HadoopRecord.rec_serve_cnf() || HadoopRecord.rec_serve_hio() || HadoopSecurity.sec_call_hdf() || HadoopSecurity.sec_call_ipc() || HadoopSecurity.sec_call_hmr() || HadoopSecurity.sec_call_nno() || HadoopSecurity.sec_call_sds() || HadoopSecurity.sec_serve_cnf() || HadoopUtil.utl_call_hio() || HadoopUtil.utl_call_prg() || HadoopUtil.utl_serve_cnf() || InputFormatDataStructures.ifd_serve_hio() || InterDataNodeProtocol.idp_serve_dno() || InterDataNodeProtocol.idp_serve_hdf() || JobClient.jcl_call_jsh() || JobClient.jcl_serve_hmr() || JobHistory.jhi_serve_hmr() || JobQueueClient.jqc_serve_hmr() || JobShell.jsh_serve_hmr() || JobShell.jsh_serve_jcl() || JobTracking.jtk_serve_hmr() || JobTracking.jtk_serve_hmt() || JoinUtilities.jnu_serve_hmr() || JvmManager.jvm_serve_hmr() || JvmManager.jvm_serve_ttr() || KeyFieldBasedPartitioner.kfp_serve_hmr() || MapredClient.mrc_serve_hmr() || MapredUtilities.mru_serve_hmr() || Metrics.mtr_serve_hmt() || MultipleOutputFormatting.mof_serve_hmr() || NameNodeHDFSProtocolCore.nhp_serve_hdf() || NameNodeHDFSProtocolCore.nhp_serve_nno() || Namenode.nno_call_bal() || Namenode.nno_call_cns() || Namenode.nno_call_nhp() || Namenode.nno_call_nnp() || Namenode.nno_call_snn() || Namenode.nno_serve_hdf() || Namenode.nno_serve_htp() || Namenode.nno_serve_ipc() || Namenode.nno_serve_hmt() || Namenode.nno_serve_sec() || NamenodeProtocol.nnp_serve_hdf() || NamenodeProtocol.nnp_serve_nno() || NetworkUtilities.nwu_serve_hnt() || OrphanedProtocolUtilities.opu_serve_hio() || OtherUtilities.otu_serve_hio() || Progress.prg_serve_utl() || ProtocolUtilities.pru_serve_hio() || SecondaryNameNode.snn_serve_hdf() || SecondaryNameNode.snn_serve_htp() || SecondaryNameNode.snn_serve_nno() || SecurityDataStructures.sds_serve_sec() || SequenceFileHandling.sfh_serve_hio() || TaskDataStorage.tds_serve_hmr() || TaskTrackingAndRunning.ttr_call_jvm() || TaskTrackingAndRunning.ttr_serve_hmr() || TotalOrderPartitioner.top_serve_hmr() || TrackerProtocols.tkp_serve_hmr() || TransferHDFSoverHTTP.thh_serve_hdf() || TransferHDFSoverHTTP.thh_serve_htp() || ValueAggregator.vag_serve_hmr();
+}
