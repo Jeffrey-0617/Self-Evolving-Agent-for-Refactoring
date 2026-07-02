@@ -1,0 +1,24 @@
+-- FAILURE: assertion references event 'sent' but port 'send' only declares event 'process'
+
+connector WRConnector {
+  role writer(j) = process -> ch!j -> Skip;
+  role writestorage() = ch?j -> process -> writestorage();
+}
+
+component Alpha {
+  port send(j) = process -> sentwire.writer(j) -> Skip;
+}
+
+component Beta {
+  port receive() = sentwire.writestorage() -> processed -> Skip;
+}
+
+system test = new Alpha, new Beta;
+
+attachments {
+  sentwire = WRConnector;
+  Alpha.send <*> sentwire.writer(1);
+  Beta.receive <*> sentwire.writestorage();
+}
+
+assert test |= [] (Alpha.send.sent -> <> Beta.receive.processed);

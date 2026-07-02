@@ -1,0 +1,25 @@
+-- FAILURE: assertion references 'submitted' but port 'submitfraud' declares event 'fraudsubmitted'
+-- (mirrors the actual bug from the eshop fraud integration run)
+
+connector WRConnector {
+  role writer(j) = process -> ch!j -> Skip;
+  role writestorage() = ch?j -> process -> writestorage();
+}
+
+component FraudGateway {
+  port submitfraud(j) = process -> fraudsubmitted -> sentwire.writer(j) -> Skip;
+}
+
+component RiskDecision {
+  port evaluate() = sentwire.writestorage() -> evaluated -> Skip;
+}
+
+system fraud = new FraudGateway, new RiskDecision;
+
+attachments {
+  sentwire = WRConnector;
+  FraudGateway.submitfraud <*> sentwire.writer(1);
+  RiskDecision.evaluate <*> sentwire.writestorage();
+}
+
+assert fraud |= [] ((!RiskDecision.evaluate.evaluated) U (FraudGateway.submitfraud.submitted));

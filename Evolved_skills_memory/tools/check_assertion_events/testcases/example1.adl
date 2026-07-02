@@ -1,0 +1,24 @@
+-- SUCCESS: all assertion event references match declared port events
+
+connector WRConnector {
+  role writer(j) = process -> ch!j -> Skip;
+  role writestorage() = ch?j -> process -> writestorage();
+}
+
+component Alpha {
+  port send(j) = process -> sentwire.writer(j) -> Skip;
+}
+
+component Beta {
+  port receive() = sentwire.writestorage() -> processed -> Skip;
+}
+
+system test = new Alpha, new Beta;
+
+attachments {
+  sentwire = WRConnector;
+  Alpha.send <*> sentwire.writer(1);
+  Beta.receive <*> sentwire.writestorage();
+}
+
+assert test |= [] (Alpha.send.process -> <> Beta.receive.processed);

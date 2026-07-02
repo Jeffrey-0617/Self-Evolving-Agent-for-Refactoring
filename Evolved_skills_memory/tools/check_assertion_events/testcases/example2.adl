@@ -1,0 +1,24 @@
+-- SUCCESS: multiple assertions with multiple components, all event names valid
+
+connector CSConnector {
+  role requester(j) = process -> req!j -> res?j -> Skip;
+  role responder()  = req?j -> invoke -> process -> res!j -> responder();
+}
+
+component Client {
+  port call(j) = process -> csconn.requester(j) -> Skip;
+}
+
+component Server {
+  port handle() = csconn.responder() -> handled -> Skip;
+}
+
+system svc = new Client, new Server;
+
+attachments {
+  csconn = CSConnector;
+  Client.call <*> csconn.requester(5);
+  Server.handle <*> csconn.responder();
+}
+
+assert svc |= [] (Client.call.process -> <> Server.handle.handled);
