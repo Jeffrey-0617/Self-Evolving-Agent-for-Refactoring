@@ -17,8 +17,8 @@ Evolved_skills_memory/
 
 Skills are reusable procedural instructions the agent invokes during a task. There are two kinds:
 
-- **Script-based Skills** — the skill is backed by a static analysis tool the agent wrote. The skill describes when and how to use the tool, and what failure cases to watch for. Example: [`check-assertion-events`](skills/check-assertion-events/SKILL.md)
-- **Guidance Skills** — pure guidance rules with no executable script. Example: [`reusableskill-assertion-design`](skills/reusableskill-assertion-design/SKILL.md)
+- **Script-based Skills** — the skill is backed by a static analysis tool the agent wrote. The skill describes when and how to use the tool, and what failure cases to watch for. An example can be found at [`skills/check-port-name-uniqueness/SKILL.md`](skills/check-port-name-uniqueness/SKILL.md).
+- **Guidance Skills** — pure guidance rules with no executable script. An example can be found at [`skills/reusableskill-connector-rules/SKILL.md`](skills/reusableskill-connector-rules/SKILL.md).
 
 See [`skills/README.md`](skills/README.md) for more details and examples.
 
