@@ -274,7 +274,7 @@ def preprocess_with_adl(input_adl):
 # ---------- Divide ADL & PAT verification ----------
 
 def _verify_adl_via_pat(adl_with_assertions):
-    url = "http://10.211.55.4:8090/api/adlapi/verify"  # adjust if needed
+    url = "http://0.0.0.0:0000/api/adlapi/verify"  # adjust if needed
     data = {"model": "test", "code": adl_with_assertions}
     try:
         response = requests.post(url, json=data, timeout=(10, 900))
