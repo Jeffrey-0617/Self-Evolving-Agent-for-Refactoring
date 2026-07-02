@@ -6,7 +6,7 @@ There are two kinds of skills:
 
 ---
 
-## Skills with Tools
+## Script-based Skills
 
 These skills are backed by a static analysis tool (a Python script in `tools/`). The skill defines when to invoke the tool, how to interpret its output, and what failure cases to expect.
 
@@ -42,7 +42,7 @@ Other skills with tools: [`check-assertion-events`](check-assertion-events/SKILL
 
 ---
 
-## Skills without Tools
+## Guidance Skills
 
 These are pure knowledge rules — design guidelines, assertion-writing rules, or diagnostic heuristics with no executable component.
 
@@ -77,14 +77,3 @@ Other skills without tools: [`reusableskill-assertion-design`](reusableskill-ass
 
 ---
 
-## All Skills
-
-| Skill | Type | Purpose |
-|---|---|---|
-| [`check-port-name-uniqueness`](check-port-name-uniqueness/SKILL.md) | With tool | Verify port names are globally unique across all components |
-| [`check-assertion-events`](check-assertion-events/SKILL.md) | With tool | Verify assertion event names match port declarations |
-| [`check-role-param-integers`](check-role-param-integers/SKILL.md) | With tool | Verify connector role parameters are integer literals |
-| [`check-adl-no-asserts`](check-adl-no-asserts/SKILL.md) | With tool | Verify no assert statements are embedded in the ADL file |
-| [`reusableskill-connector-rules`](reusableskill-connector-rules/SKILL.md) | Rules only | Design rules for connectors and port attachments |
-| [`reusableskill-assertion-design`](reusableskill-assertion-design/SKILL.md) | Rules only | Rules for writing correct temporal-logic assertions |
-| [`reusableskill-verification-diagnostics`](reusableskill-verification-diagnostics/SKILL.md) | Rules only | Rules for interpreting verifier outcomes |
