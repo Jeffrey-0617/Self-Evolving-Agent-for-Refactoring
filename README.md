@@ -23,7 +23,7 @@ As the agent completes tasks, it writes new evolved skills, tools, and memory. T
 
 - **Skills** — new skills created during tasks can be found at [`Evolved_skills_memory/skills/README.md`](Evolved_skills_memory/skills/README.md). To illustrate what generated skills are, examples can be found at [`Evolved_skills_memory/skills/check-port-name-uniqueness/SKILL.md`](Evolved_skills_memory/skills/check-port-name-uniqueness/SKILL.md) and [`Evolved_skills_memory/skills/reusableskill-connector-rules/SKILL.md`](Evolved_skills_memory/skills/reusableskill-connector-rules/SKILL.md).
 - **Tools** — static analysis Python scripts associated with the script-based skills can be found at [`Evolved_skills_memory/tools/README.md`](Evolved_skills_memory/tools/README.md).
-- **Memory patterns** — generalised reusable knowledge extracted from completed tasks can be found at [`Evolved_skills_memory/Memory/patterns/`](Evolved_skills_memory/Memory/patterns/).
+- **Memory patterns** — generalised reusable knowledge extracted from completed tasks.
 - **Memory episodes** — concrete task-specific evidence.
 ---
 
