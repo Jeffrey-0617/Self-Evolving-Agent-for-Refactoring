@@ -24,7 +24,7 @@ As the agent completes tasks, it writes new evolved skills, tools, and memory. T
 - **Skills** — new skills created during tasks can be found at [`Evolved_skills_memory/skills/README.md`](Evolved_skills_memory/skills/README.md). To illustrate what generated skills are, examples can be found at [`Evolved_skills_memory/skills/check-port-name-uniqueness/SKILL.md`](Evolved_skills_memory/skills/check-port-name-uniqueness/SKILL.md) and [`Evolved_skills_memory/skills/reusableskill-connector-rules/SKILL.md`](Evolved_skills_memory/skills/reusableskill-connector-rules/SKILL.md).
 - **Tools** — static analysis Python scripts associated with the script-based skills can be found at [`Evolved_skills_memory/tools/README.md`](Evolved_skills_memory/tools/README.md).
 - **Memory patterns** — generalised reusable knowledge extracted from completed tasks can be found at [`Evolved_skills_memory/Memory/patterns/`](Evolved_skills_memory/Memory/patterns/).
-- **Memory episodes** — concrete task-specific evidence can be found at [`Evolved_skills_memory/Memory/episodes/`](Evolved_skills_memory/Memory/episodes/).
+- **Memory episodes** — concrete task-specific evidence.
 ---
 
 ## Running the Tool
@@ -44,6 +44,16 @@ or in `.env`:
 ```
 ANTHROPIC_API_KEY=...
 ```
+
+### PAT verifier setup
+
+Before running the agent, set up the PAT verifier with the Wright# modules and deploy it as a service. Then, update the verifier endpoint in [`agents/verification/verify_wrighthash_all_properties.py`](agents/verification/verify_wrighthash_all_properties.py), and make sure the port matches the deployed PAT service:
+
+```python
+url = "http://0.0.0.0:<PORT>/api/adlapi/verify"
+```
+
+Replace it with the actual PAT service port before running the batch script.
 
 ### Usage
 
