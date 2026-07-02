@@ -7,7 +7,7 @@ This repository implements a self-evolving LLM agent that refactors software arc
 ## Agent Knowledge
 
 ### Cold-start Skills
-The agent starts with a set of cold-start skills in `.claude/skills/`. These are available from the very first task:
+The agent starts with a set of cold-start skills in [`.claude/skills/`](.claude/skills/). These are available from the very first task:
 
 | Skill | Purpose |
 |---|---|
@@ -21,10 +21,10 @@ The agent starts with a set of cold-start skills in `.claude/skills/`. These are
 ### Evolving Memory and Skills
 As the agent completes tasks, it writes new evolved skills, tools, and memory. These can be found at [`Evolved_skills_memory/`](Evolved_skills_memory/README.md). This folder captures everything the agent has learned across all runs:
 
-- **[`skills/`](Evolved_skills_memory/skills/README.md)** — new skills created during tasks. Two kinds: script-based skills (e.g. [`check-port-name-uniqueness`](Evolved_skills_memory/skills/check-port-name-uniqueness/SKILL.md)) and guidance skills (e.g. [`reusableskill-connector-rules`](Evolved_skills_memory/skills/reusableskill-connector-rules/SKILL.md)).
-- **[`tools/`](Evolved_skills_memory/tools/README.md)** — static analysis Python scripts assoicated with the script-based skills
-- **`Memory/patterns/`** — generalised reusable knowledge extracted from completed tasks.
-- **`Memory/episodes/`** — concrete task-specific evidence
+- **Skills** — new skills created during tasks can be found at [`Evolved_skills_memory/skills/README.md`](Evolved_skills_memory/skills/README.md). To illustrate what generated skills are, examples can be found at [`Evolved_skills_memory/skills/check-port-name-uniqueness/SKILL.md`](Evolved_skills_memory/skills/check-port-name-uniqueness/SKILL.md) and [`Evolved_skills_memory/skills/reusableskill-connector-rules/SKILL.md`](Evolved_skills_memory/skills/reusableskill-connector-rules/SKILL.md).
+- **Tools** — static analysis Python scripts associated with the script-based skills can be found at [`Evolved_skills_memory/tools/README.md`](Evolved_skills_memory/tools/README.md).
+- **Memory patterns** — generalised reusable knowledge extracted from completed tasks can be found at [`Evolved_skills_memory/Memory/patterns/`](Evolved_skills_memory/Memory/patterns/).
+- **Memory episodes** — concrete task-specific evidence can be found at [`Evolved_skills_memory/Memory/episodes/`](Evolved_skills_memory/Memory/episodes/).
 ---
 
 ## Running the Tool
