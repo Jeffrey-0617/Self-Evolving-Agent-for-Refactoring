@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 -c \"import sys,json; lines=sys.stdin.read\\(\\).strip\\(\\).split\\(''''\\\\n''''\\); [print\\(json.loads\\(l\\).get\\(''''message'''',{}\\).get\\(''''content'''',''''''''\\)[:200] if isinstance\\(json.loads\\(l\\).get\\(''''message'''',{}\\).get\\(''''content'''',''''''''\\), str\\) else ''''''''\\) for l in lines[:2] if l]\")",
+      "Bash(grep:*)",
+      "Bash(python3:*)",
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "MultiEdit(*)",
+      "Glob(*)",
+
+      "Read(/.claude/**)",
+      "Write(/.claude/**)",
+      "Edit(/.claude/**)",
+      "MultiEdit(/.claude/**)"
+    ]
+  }
+}

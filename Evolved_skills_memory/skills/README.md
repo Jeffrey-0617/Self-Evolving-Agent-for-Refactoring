@@ -16,7 +16,7 @@ Verifies that every port name is globally unique across all components in the AD
 
 Usage:
 ```bash
-python3 .claude/tools/check_port_name_uniqueness/check_port_name_uniqueness.py tmp/refactored.adl
+python3 Evolved_skills_memory/tools/check_port_name_uniqueness/check_port_name_uniqueness.py tmp/refactored.adl
 ```
 
 Key failure case documented in the skill:

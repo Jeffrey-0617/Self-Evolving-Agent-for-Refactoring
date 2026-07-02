@@ -4,10 +4,10 @@ Python scripts written by the agent to catch known error classes in Wright# ADL 
 
 Run all tools in this order before every verification:
 ```bash
-python3 .claude/tools/check_adl_no_asserts/check_adl_no_asserts.py tmp/refactored.adl
-python3 .claude/tools/check_port_name_uniqueness/check_port_name_uniqueness.py tmp/refactored.adl
-python3 .claude/tools/check_role_param_integers/check_role_param_integers.py tmp/refactored.adl
-python3 .claude/tools/check_assertion_events/check_assertion_events.py tmp/refactored.adl
+python3 Evolved_skills_memory/tools/check_adl_no_asserts/check_adl_no_asserts.py tmp/refactored.adl
+python3 Evolved_skills_memory/tools/check_port_name_uniqueness/check_port_name_uniqueness.py tmp/refactored.adl
+python3 Evolved_skills_memory/tools/check_role_param_integers/check_role_param_integers.py tmp/refactored.adl
+python3 Evolved_skills_memory/tools/check_assertion_events/check_assertion_events.py tmp/refactored.adl
 ```
 
 ---
@@ -20,8 +20,8 @@ python3 .claude/tools/check_assertion_events/check_assertion_events.py tmp/refac
 
 **Usage:**
 ```bash
-python3 .claude/tools/check_port_name_uniqueness/check_port_name_uniqueness.py tmp/refactored.adl
-python3 .claude/tools/check_port_name_uniqueness/check_port_name_uniqueness.py --test  # run self-tests
+python3 Evolved_skills_memory/tools/check_port_name_uniqueness/check_port_name_uniqueness.py tmp/refactored.adl
+python3 Evolved_skills_memory/tools/check_port_name_uniqueness/check_port_name_uniqueness.py --test  # run self-tests
 ```
 
 **Testcases** (embedded in the script as `TEST_CASES`):
@@ -93,7 +93,7 @@ component AssignLog {
 
 **Linked skill:** [`check-role-param-integers`](../skills/check-role-param-integers/SKILL.md)
 
-Built-in self-tests: `python3 .claude/tools/check_role_param_integers/check_role_param_integers.py --test`
+Built-in self-tests: `python3 Evolved_skills_memory/tools/check_role_param_integers/check_role_param_integers.py --test`
 
 ---
 
