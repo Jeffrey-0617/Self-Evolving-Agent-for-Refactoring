@@ -1,16 +1,8 @@
----
-model: claude-sonnet-4-6
-system: archstudio
-formal_verification_attempts: 2
-outcome: valid
-refined_pattern: backend-split-decomposition-topology
-refined_pattern_variant: "Variant D: utility split"
----
 This trace shows a design refactoring that finished with a VALID result after the agent retrieved and applied knowledge distilled from earlier runs on other systems.
 
 ## 1. New requirement
 
-> Split ArchStudioUtils into domain-specific utility services: extract EditorUtils (serves EditorManager, ArchEdit, SharedEditorInfrastructure, and Launcher), AnalysisUtils (serves Archlight, TypeWrangler, GuardTracker, Schematron, and SelectorDriver), ModelUtils (serves XArchADT, XArchChangeSet, ChangeSetUtils, and ChangeSetRelationshipManager), and ViewUtils (serves Archipelago, GraphLayout, RationaleView, and TracelinkView) — each utility service must provide the same API contract as the original ArchStudioUtils ports it replaces, Resources must route resource requests to the appropriate domain utility, PreferencesADT must configure per-domain utility settings, Meta must access ModelUtils for metadata operations, and FileManager must use EditorUtils instead of the monolithic ArchStudioUtils.
+> Provide domain-specific utility functionality by spliting ArchStudioUtils into domain-specific utility services: extract EditorUtils (serves EditorManager, ArchEdit, SharedEditorInfrastructure, and Launcher), AnalysisUtils (serves Archlight, TypeWrangler, GuardTracker, Schematron, and SelectorDriver), ModelUtils (serves XArchADT, XArchChangeSet, ChangeSetUtils, and ChangeSetRelationshipManager), and ViewUtils (serves Archipelago, GraphLayout, RationaleView, and TracelinkView) — each utility service must provide the same API contract as the original ArchStudioUtils ports it replaces, Resources must route resource requests to the appropriate domain utility, PreferencesADT must configure per-domain utility settings, Meta must access ModelUtils for metadata operations, and FileManager must use EditorUtils instead of the monolithic ArchStudioUtils.
 
 ## 2. Knowledge Retrieval
 
@@ -96,57 +88,74 @@ The partial specification below intentionally displays only 4 paths considering 
 connector CSConnector {
   role requester(j) = process -> req!j -> res?j -> Skip;
   role responder() = req?j -> invoke -> process -> res!j -> responder();
+  ...
 }
 
 component EditorManager {
   port manager_util_call() = mgr_util_called -> manager_util_call();
+  ...
 }
 
 component EditorUtils {
   port editorutils_srv_em() = eu_em_served -> editorutils_srv_em();
+  ...
 }
 
 component Archlight {
   port call_al_util_service() = al_util_called -> call_al_util_service();
+  ...
 }
 
 component AnalysisUtils {
   port analysisutils_srv_al() = au_al_served -> analysisutils_srv_al();
+  ...
 }
 
 component XArchADT {
   port access_xarch_utils() = xarch_util_call -> access_xarch_utils();
+  ...
 }
 
 component ModelUtils {
   port modelutils_srv_xadt() = mu_xadt_served -> modelutils_srv_xadt();
+  ...
 }
 
 component Archipelago {
   port use_archstudio_utils() = arch_util_used -> use_archstudio_utils();
+  ...
 }
 
 component ViewUtils {
   port viewutils_srv_arch() = vu_arch_served -> viewutils_srv_arch();
+  ...
 }
 
 system archstudio {
   declare em_to_edutil = CSConnector;
+  ...
   declare al_to_anutil = CSConnector;
+  ...
   declare xadt_to_modutil = CSConnector;
+  ...
   declare arch_to_viewutil = CSConnector;
+  ...
 
   attach EditorManager.manager_util_call() = em_to_edutil.requester(30);
   attach EditorUtils.editorutils_srv_em() = em_to_edutil.responder();
+  ...
 
   attach Archlight.call_al_util_service() = al_to_anutil.requester(15);
   attach AnalysisUtils.analysisutils_srv_al() = al_to_anutil.responder();
+  ...
 
   attach XArchADT.access_xarch_utils() = xadt_to_modutil.requester(68);
   attach ModelUtils.modelutils_srv_xadt() = xadt_to_modutil.responder();
+  ...
 
   attach Archipelago.use_archstudio_utils() = arch_to_viewutil.requester(20);
   attach ViewUtils.viewutils_srv_arch() = arch_to_viewutil.responder();
+  ...
 }
 ```
 
@@ -216,7 +225,13 @@ PreferencesADT
       | one configuration connection
       v
 ArchStudioUtils
-serves EditorManager, ArchEdit, Archlight, XArchADT, Archipelago, ...
+serves:
+EditorManager
+ArchEdit
+Archlight
+XArchADT
+Archipelago
+...
       |
       | one resource connection
       v
@@ -250,9 +265,6 @@ AFTER REFACTORING
 ```
 
 ### 6.2 properties
-
-The complete property set recorded in cell `K85` is:
-
 ```wright
 assert archstudio |= [] (EditorManager.manager_util_call.mgr_util_called -> <> EditorUtils.editorutils_srv_em.eu_em_served);
 assert archstudio |= [] (ArchEdit.edit_via_utils.edit_dispatched -> <> EditorUtils.editorutils_srv_ae.eu_ae_served);
