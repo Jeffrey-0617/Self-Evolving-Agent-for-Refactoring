@@ -1,49 +1,57 @@
 ---
 model: claude-sonnet-4-6
 system: archstudio
-formal_verification_attempts: 1
+formal_verification_attempts: 2
 outcome: valid
-refined knowledge: backend-split-decomposition-topology
+refined_pattern: backend-split-decomposition-topology
+refined_pattern_variant: "Variant D: utility split"
 ---
-This trace shows a design refactoring that passed formal verification on its first attempt because the agent retrieved and applied knowledge distilled from earlier runs on other systems.
+This trace shows a design refactoring that finished with a VALID result after the agent retrieved and applied knowledge distilled from earlier runs on other systems.
 
 ## 1. New requirement
 
 > Split ArchStudioUtils into domain-specific utility services: extract EditorUtils (serves EditorManager, ArchEdit, SharedEditorInfrastructure, and Launcher), AnalysisUtils (serves Archlight, TypeWrangler, GuardTracker, Schematron, and SelectorDriver), ModelUtils (serves XArchADT, XArchChangeSet, ChangeSetUtils, and ChangeSetRelationshipManager), and ViewUtils (serves Archipelago, GraphLayout, RationaleView, and TracelinkView) — each utility service must provide the same API contract as the original ArchStudioUtils ports it replaces, Resources must route resource requests to the appropriate domain utility, PreferencesADT must configure per-domain utility settings, Meta must access ModelUtils for metadata operations, and FileManager must use EditorUtils instead of the monolithic ArchStudioUtils.
 
-## 2. Knowledge Retervial
+## 2. Knowledge Retrieval
 
-### 2.1 Eshop Episode
-Reused by Episode 51:
+The retrieval results included relevant Episodes, Patterns, Skills, and previously generated Tools from prior runs.
 
-- Pattern: `port-isolation-for-dual-input-roles`
-- Pattern: `until-assertion-csp-anti-pattern`
-- Pattern: `assertion-event-name-mismatch`
-- Skill: `check-assertion-events`
+### 2.1 Past experience from Eshop
 
-### 2.2 Rideshare Episode 
-Reused by Episode 51:
+- **Episode:** payment-fraud service integration
+  - **Pattern:** `port-isolation-for-dual-input-roles`
+    - **Skill (guidance):** `reusableskill-connector-rules`
+  - **Pattern:** `until-assertion-csp-anti-pattern`
+    - **Skill (guidance):** `reusableskill-assertion-design`
+  - **Pattern:** `assertion-event-name-mismatch`
+    - **Skill (guidance):** `reusableskill-assertion-design`
+    - **Skill (tool-backed):** `check-assertion-events`
+    - **Tool (previously generated):** `check_assertion_events`
+- **Episode:** decomposition of `ShopBackend`
+  - **Pattern:** `backend-split-decomposition-topology`
+    - **Skill (guidance):** `reusableskill-connector-rules`
 
-- Pattern: `duplicate-port-name-across-components`
-- Skill: `check-port-name-uniqueness`
+### 2.2 Past experience from Rideshare
 
-### 2.3 Lifenet Episode 
-Reused by Episode 51:
+- **Episode:** scheduled-ride booking integration
+  - **Pattern:** `duplicate-port-name-across-components`
+    - **Skill (tool-backed):** `check-port-name-uniqueness`
+    - **Tool (previously generated):** `check_port_name_uniqueness`
 
-- Pattern: `adl-file-no-assert-statements`
-- Skill: `check-adl-no-asserts`
+### 2.3 Past experience from Lifenet
 
-### 2.4 Eshop Episode 
-Reused by Episode 51:
+- **Episode:** insurance-subsystem integration
+  - **Pattern:** `adl-file-no-assert-statements`
+    - **Skill (tool-backed):** `check-adl-no-asserts`
+    - **Tool (previously generated):** `check_adl_no_asserts`
 
-- Pattern: `backend-split-decomposition-topology`
-- Skill: `reusableskill-connector-rules`
+## 3. Refactor based on past experience in the ArchStudio design
+Only relevant structural summaries or partial specifications are displayed in the following content where needed.
 
-## 3. Retrieved knowledge applied to the ArchStudio design
+### 3.1 caller allocation
+- **Decision:** the agent inspected each caller's responsibility and assigned it to the appropriate utility.
 
-### Rule A — classify callers by domain affinity
-
-The old `ArchStudioUtils` callers were assigned to four domains:
+The resulting structural allocation is summarized below. This is a design-level component mapping, not a formal property specification in Wright#:
 
 ```text
 EditorUtils
@@ -64,168 +72,225 @@ ViewUtils
   TracelinkView, ArchipelagoPrefs
 ```
 
-The non-spec callers were not ignored: the agent classified them using the domain-affinity rule learned from earlier backend decomposition.
+### 3.2 Retrieved topology patterns applied to ArchStudio
 
-### Rule B — point-to-point connector per caller
+- **Episode — Eshop backend decomposition:** decomposition of `ShopBackend`.
+  - **Pattern:** `backend-split-decomposition-topology`
+- **Episode — Eshop payment-fraud integration:**
+  - **Pattern:** `port-isolation-for-dual-input-roles`
+- **Skill (guidance):** `reusableskill-connector-rules`
+- **Source — original ArchStudio ADL:** callers already used separate **Connector type:** `CSConnector` connections to the monolithic **Component:** `ArchStudioUtils`.
 
-Each caller received a dedicated CSConnector wire to the correct utility. Each new utility declared one responder port per inbound connector.
+The actual split-related ADL change was substantially larger than four attachments:
 
-Representative final attachments:
+- four utility components were added with 37 ports in total
+- 29 caller-to-utility paths were created for the caller allocation shown in Section 3.1;
+- 74 endpoint attachments were added;
+- **Component:** `PreferencesADT` replaced one monolithic port with four utility-specific ports;
+- **Component:** `Resources` replaced one monolithic utility port with four utility-specific ports; and
+- **Components:** `Schematron`, `SelectorDriver`, and `ChangeSetRelationshipManager` each gained one new output port.
 
-```wright
-attach EditorUtils.editorutils_srv_em() = em_to_edutil.responder();
-attach AnalysisUtils.analysisutils_srv_al() = al_to_anutil.responder();
-attach ModelUtils.modelutils_srv_xadt() = xadt_to_modutil.responder();
-attach ViewUtils.viewutils_srv_arch() = arch_to_viewutil.responder();
+The partial specification below intentionally displays only 4 paths considering readability, one per utility:
+
+```wright#
+connector CSConnector {
+  role requester(j) = process -> req!j -> res?j -> Skip;
+  role responder() = req?j -> invoke -> process -> res!j -> responder();
+}
+
+component EditorManager {
+  port manager_util_call() = mgr_util_called -> manager_util_call();
+}
+
+component EditorUtils {
+  port editorutils_srv_em() = eu_em_served -> editorutils_srv_em();
+}
+
+component Archlight {
+  port call_al_util_service() = al_util_called -> call_al_util_service();
+}
+
+component AnalysisUtils {
+  port analysisutils_srv_al() = au_al_served -> analysisutils_srv_al();
+}
+
+component XArchADT {
+  port access_xarch_utils() = xarch_util_call -> access_xarch_utils();
+}
+
+component ModelUtils {
+  port modelutils_srv_xadt() = mu_xadt_served -> modelutils_srv_xadt();
+}
+
+component Archipelago {
+  port use_archstudio_utils() = arch_util_used -> use_archstudio_utils();
+}
+
+component ViewUtils {
+  port viewutils_srv_arch() = vu_arch_served -> viewutils_srv_arch();
+}
+
+system archstudio {
+  declare em_to_edutil = CSConnector;
+  declare al_to_anutil = CSConnector;
+  declare xadt_to_modutil = CSConnector;
+  declare arch_to_viewutil = CSConnector;
+
+  attach EditorManager.manager_util_call() = em_to_edutil.requester(30);
+  attach EditorUtils.editorutils_srv_em() = em_to_edutil.responder();
+
+  attach Archlight.call_al_util_service() = al_to_anutil.requester(15);
+  attach AnalysisUtils.analysisutils_srv_al() = al_to_anutil.responder();
+
+  attach XArchADT.access_xarch_utils() = xadt_to_modutil.requester(68);
+  attach ModelUtils.modelutils_srv_xadt() = xadt_to_modutil.responder();
+
+  attach Archipelago.use_archstudio_utils() = arch_to_viewutil.requester(20);
+  attach ViewUtils.viewutils_srv_arch() = arch_to_viewutil.responder();
+}
 ```
 
-This is the point-to-point Variant A learned from the earlier Eshop decomposition.
+### 3.3 Retrieved port-naming safeguard applied to ArchStudio
 
-### Rule C — component-scoped names prevent cross-component collisions
+- **Episode — Rideshare scheduled-ride booking:**
+  - **Pattern:** `duplicate-port-name-across-components`
+  - **Skill (tool-backed):** `check-port-name-uniqueness`
 
-The new inbound ports used utility-specific prefixes:
+The retrieved naming safeguard prevented the four utilities from declaring colliding port names, which would result in misconfigurations.
+
+### 3.4 Shared-provider connections after the utility split
+
+This change was made during **Episode:** `ep-51` to satisfy the new requirement. **Component:** `PreferencesADT` had to configure every new utility, and every new utility had to access **Component:** `Resources`.
+
+The diagrams below show the complete shared-provider topology for `PreferencesADT`, the four utility components, and `Resources`. They are not examples, but they cover only this shared-provider part of the refactoring; the 29 caller-to-utility paths from Section 3.1 are not repeated here.
+
+Before **Episode:** `ep-51`, the structure was:
 
 ```text
-editorutils_srv_*
-analysisutils_srv_*
-modelutils_srv_*
-viewutils_srv_*
+PreferencesADT -> ArchStudioUtils -> Resources
 ```
 
-This directly operationalized the Rideshare duplicate-port lesson before a collision could occur.
-
-### Rule D — shared providers expand N-fold
-
-`PreferencesADT` expanded from one monolithic utility connection to four domain connections:
-
-```wright
-port padt_to_editor_utils();
-port padt_to_analysis_utils();
-port padt_to_model_utils();
-port padt_to_view_utils();
-```
-
-`Resources` similarly gained four domain-specific responder ports:
-
-```wright
-port provide_editorutils_res();
-port provide_analysisutils_res();
-port provide_modelutils_res();
-port provide_viewutils_res();
-```
-
-## 4. Skill and tool execution
-
-Batch SkillTrace:
+After **Episode:** `ep-51`, the structure became:
 
 ```text
-wrighthash-tool-apply
-  -> check-adl-no-asserts
-  -> check-port-name-uniqueness
-  -> check-assertion-events
-  -> post-reflection
-  -> check-adl-no-asserts
+PreferencesADT -> EditorUtils   -> Resources
+               -> AnalysisUtils -> Resources
+               -> ModelUtils    -> Resources
+               -> ViewUtils     -> Resources
 ```
 
-Episode skills-used metadata additionally records:
+All names in these two diagrams are components, and the arrows represent connections rather than Wright# ADL.
 
-```text
-refactoring-workflow
-reusableskill-connector-rules
-reusableskill-assertion-design
-wrighthash-tool-apply
-check-assertion-events
-check-port-name-uniqueness
-check-adl-no-asserts
-```
+After the run, this design decision was recorded for future tasks as:
 
-All three static analysis tools passed on their first meaningful application:
+- **Pattern refined:** `backend-split-decomposition-topology`
+- **Pattern variant added:** `Variant D: utility split`
+- **Skill (guidance) updated:** `reusableskill-connector-rules`
 
-- no assertions embedded in the ADL;
-- no duplicate port names;
-- all assertion event references valid.
+The **Pattern variant:** `Variant D: utility split` is a named case inside the Pattern, not a separate Pattern or Skill.
+
+## 4. Apply Tool-based skills for static analysis before formal verification
+
+After generating the refactored design, the agent applied the previously generated Tool-based skills. Each Tool was used through its linked tool-backed Skill before formal verification. 
+- **Skill (tool-backed):** `check-adl-no-asserts` used **Tool:** `check_adl_no_asserts` to verify that the refactored ADL contained no embedded assertions: PASS.
+- **Skill (tool-backed):** `check-port-name-uniqueness` used **Tool:** `check_port_name_uniqueness` to verify global port-name uniqueness: PASS.
+- **Skill (tool-backed):** `check-assertion-events` used **Tool:** `check_assertion_events` to verify every assertion event reference against its component port declaration: PASS.
 
 ## 5. Verification outcome
 
 ```text
-Formal verification attempt 1: VALID
-Design repairs after verification: none
+Final outcome: VALID
 ```
 
-## 6. Final design — stored
+## 6. Final design and properties
 
+### 6.1 Partial topology before and after refactoring
+
+The partial topologies before and after refactoring are displayed below. `...` represents additional components and connections that are not shown.
 
 ```text
-ArchStudioUtils (28 cross-cutting serve ports)
-             |
-             v
-  +-------------------+---------------------+------------------+
-  |                   |                     |                  |
-EditorUtils      AnalysisUtils         ModelUtils          ViewUtils
-  |                   |                     |                  |
-editor callers   analysis callers      model callers       view callers
+BEFORE REFACTORING
+
+PreferencesADT
+      |
+      | one configuration connection
+      v
+ArchStudioUtils
+serves EditorManager, ArchEdit, Archlight, XArchADT, Archipelago, ...
+      |
+      | one resource connection
+      v
+Resources
+      |
+     ...
+
+
+AFTER REFACTORING
+
+                              PreferencesADT
+                                    |
+                 four independent configuration connections
+                                    |
+          +-------------------------+-------------------------+-------------------------+
+          |                         |                         |                         |
+          v                         v                         v                         v
+    EditorUtils               AnalysisUtils              ModelUtils                 ViewUtils
+    EditorManager             Archlight                  XArchADT                   Archipelago
+    ArchEdit                  TypeWrangler               XArchChangeSet             GraphLayout
+    ...                       ...                        ...                        ...
+          |                         |                         |                         |
+          +-------------------------+-------------------------+-------------------------+
+                                    |
+                    four independent resource connections
+                                    |
+                                    v
+                                Resources
+                                    |
+                                   ...
 ```
 
-`PreferencesADT` and `Resources` connect independently to all four new utilities. The final 27 properties are stored in batch cell `K85`.
+### 6.2 properties
 
-## 9. Knowledge Gained by the ArchStudio run
+The complete property set recorded in cell `K85` is:
 
-The flow did not stop at reuse. This run generalized a new sub-variant:
-
-```text
-backend-split-decomposition-topology
-  + Variant D: utility split
+```wright
+assert archstudio |= [] (EditorManager.manager_util_call.mgr_util_called -> <> EditorUtils.editorutils_srv_em.eu_em_served);
+assert archstudio |= [] (ArchEdit.edit_via_utils.edit_dispatched -> <> EditorUtils.editorutils_srv_ae.eu_ae_served);
+assert archstudio |= [] (SharedEditorInfrastructure.shared_util_call.shared_util_called -> <> EditorUtils.editorutils_srv_sei.eu_sei_served);
+assert archstudio |= [] (Launcher.launch_utils.utils_launched -> <> EditorUtils.editorutils_srv_lnch.eu_lnch_served);
+assert archstudio |= [] (FileManager.file_util_call.file_util_called -> <> EditorUtils.editorutils_srv_fm.eu_fm_served);
+assert archstudio |= [] (Archlight.call_al_util_service.al_util_called -> <> AnalysisUtils.analysisutils_srv_al.au_al_served);
+assert archstudio |= [] (TypeWrangler.wrangle_utils.types_wrangled -> <> AnalysisUtils.analysisutils_srv_tw.au_tw_served);
+assert archstudio |= [] (GuardTracker.track_guards.guards_tracked -> <> AnalysisUtils.analysisutils_srv_gt.au_gt_served);
+assert archstudio |= [] (Schematron.schm_to_analysis_utils.schm_au_called -> <> AnalysisUtils.analysisutils_srv_schm.au_schm_served);
+assert archstudio |= [] (SelectorDriver.sd_to_analysis_utils.sd_au_called -> <> AnalysisUtils.analysisutils_srv_sd.au_sd_served);
+assert archstudio |= [] (XArchADT.access_xarch_utils.xarch_util_call -> <> ModelUtils.modelutils_srv_xadt.mu_xadt_served);
+assert archstudio |= [] (XArchChangeSet.xarch_cs_archstudio_call.xarch_cs_arch -> <> ModelUtils.modelutils_srv_xcs.mu_xcs_served);
+assert archstudio |= [] (ChangeSetUtils.cs_util_arch_call.cs_arch_called -> <> ModelUtils.modelutils_srv_csu.mu_csu_served);
+assert archstudio |= [] (ChangeSetRelationshipManager.csrm_to_model_utils.csrm_mu_called -> <> ModelUtils.modelutils_srv_csrm.mu_csrm_served);
+assert archstudio |= [] (Meta.meta_util_call.meta_util_called -> <> ModelUtils.modelutils_srv_meta.mu_meta_served);
+assert archstudio |= [] (Archipelago.use_archstudio_utils.arch_util_used -> <> ViewUtils.viewutils_srv_arch.vu_arch_served);
+assert archstudio |= [] (GraphLayout.layout_to_utils.layout_util_call -> <> ViewUtils.viewutils_srv_gl.vu_gl_served);
+assert archstudio |= [] (RationaleView.view_rv_utils.rv_util_called -> <> ViewUtils.viewutils_srv_rv.vu_rv_served);
+assert archstudio |= [] (TracelinkView.trace_links.links_traced -> <> ViewUtils.viewutils_srv_tlv.vu_tlv_served);
+assert archstudio |= [] (PreferencesADT.padt_to_editor_utils.padt_eu_called -> <> EditorUtils.editorutils_srv_padt.eu_padt_served);
+assert archstudio |= [] (PreferencesADT.padt_to_analysis_utils.padt_au_called -> <> AnalysisUtils.analysisutils_srv_padt.au_padt_served);
+assert archstudio |= [] (PreferencesADT.padt_to_model_utils.padt_mu_called -> <> ModelUtils.modelutils_srv_padt.mu_padt_served);
+assert archstudio |= [] (PreferencesADT.padt_to_view_utils.padt_vu_called -> <> ViewUtils.viewutils_srv_padt.vu_padt_served);
+assert archstudio |= [] (EditorUtils.editorutils_to_res.eu_res_requested -> <> Resources.provide_editorutils_res.eu_res_provided);
+assert archstudio |= [] (AnalysisUtils.analysisutils_to_res.au_res_requested -> <> Resources.provide_analysisutils_res.au_res_provided);
+assert archstudio |= [] (ModelUtils.modelutils_to_res.mu_res_requested -> <> Resources.provide_modelutils_res.mu_res_provided);
+assert archstudio |= [] (ViewUtils.viewutils_to_res.vu_res_requested -> <> Resources.provide_viewutils_res.vu_res_provided);
 ```
 
-Variant D added three reusable rules:
+## 7. Knowledge Gained by this run
 
-1. classify unspecified callers by domain affinity;
+This run refined **Pattern:** `backend-split-decomposition-topology` by adding **Pattern variant:** `Variant D: utility split`.
+
+**Pattern variant:** `Variant D: utility split` added three reusable rules:
+
+1. classify unspecified callers by functional responsibility;
 2. expand shared infrastructure providers from one port to N ports;
 3. prefix every new utility's ports with the utility identity.
 
-The pattern metadata now records eight references and links to `reusableskill-connector-rules`, where the operational design guidance is available to later runs.
-
-## 10. End-to-end learning loop
-
-```text
-Earlier heterogeneous systems
-  |
-  |-- Eshop ep-1: port isolation + assertion rules
-  |-- Rideshare ep-2: global port uniqueness
-  |-- Lifenet ep-3: assertions outside ADL
-  |-- Eshop ep-17: backend decomposition topology
-  v
-Patterns + Tools + Reusable Skills
-  v
-ArchStudio ep-51 retrieval
-  v
-Correct first-pass design decomposition
-  v
-Static checks all pass
-  v
-Formal verification VALID on attempt 1
-  v
-New Variant D distilled back into Pattern + connector Skill
-  v
-Available to future systems
-```
-
-## 11. Completeness assessment
-
-| Trace element | Status | Evidence |
-|---|---|---|
-| Original ArchStudio architecture | Complete | `wrighthashADL/archstudio.adl` |
-| Requirement | Complete | Batch `D85` |
-| Prior knowledge sources | Complete | Episodes 1, 2, 3 and 17 |
-| Retrieved patterns | Complete | Pattern files and Episode 51 index metadata |
-| Operational skills/tools | Complete | Skill and checker files |
-| Refactored design | Complete | Batch `L85` |
-| Generated properties | Complete | Batch `K85` |
-| Static-analysis outcome | Complete | Episode 51 |
-| Formal verification | Complete | Episode 51 plus batch invocation metadata |
-| Verification repair | Not applicable | First-pass success; no repair occurred |
-| Reflection output | Complete | Episode 51 and Variant D pattern update |
-
-## 12. Research-use conclusion
-
-This is a complete cross-system knowledge-transfer trajectory. It demonstrates that first-pass success is itself evidence of learning when the design decisions can be traced to patterns, tools, and skills distilled from prior heterogeneous runs. It does not claim a verification-guided repair because none occurred.
+The **Pattern:** `backend-split-decomposition-topology` metadata now records eight references and links to **Skill (guidance):** `reusableskill-connector-rules`, where the operational design guidance is available to later runs.
