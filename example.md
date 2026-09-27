@@ -283,15 +283,9 @@ After generating the refactored design, the agent applied the previously generat
 - **Skill (tool-backed):** `check-port-name-uniqueness` used **Tool:** `check_port_name_uniqueness` to verify global port-name uniqueness: PASS.
 - **Skill (tool-backed):** `check-assertion-events` used **Tool:** `check_assertion_events` to verify every assertion event reference against its component port declaration: PASS.
 
-## 5. Verification outcome
+## 5. Final design and properties
 
-```text
-Final outcome: VALID
-```
-
-## 6. Final design and properties
-
-### 6.1 Partial topology before and after refactoring
+### 5.1 Partial topology before and after refactoring
 
 The partial topologies before and after refactoring are displayed below. `...` represents additional components and connections that are not shown.
 
@@ -342,7 +336,7 @@ AFTER REFACTORING
                                    ...
 ```
 
-### 6.2 Properties (partial: complete EditorUtils design shown for readability)
+### 5.2 Properties (partial: complete EditorUtils design shown for readability)
 
 **Only the `EditorUtils` part of the refactored system is displayed for readability.**
 
@@ -356,9 +350,15 @@ assert archstudio |= [] (PreferencesADT.padt_to_editor_utils.padt_eu_called -> <
 assert archstudio |= [] (EditorUtils.editorutils_to_res.eu_res_requested -> <> Resources.provide_editorutils_res.eu_res_provided);
 ```
 
-## 7. Distill and Update: Knowledge Gained by this run
+### 5.3. Verification outcome
 
-### 7.1 LLM-based distillation from the raw trajectory
+```text
+Final outcome: VALID
+```
+
+## 6. Distill and Update: Knowledge Gained by this run
+
+### 6.1 LLM-based distillation from the raw trajectory
 
 After the refactoring and verification loop terminated, the agent performed LLM-based distillation of the raw execution trajectory based on **Post-reflectionkill (workflow):**.
 
@@ -377,17 +377,17 @@ The LLM distilled the ArchStudio trajectory into the following candidate artifac
 | **Guidance Skill candidate** | Procedural connector guidance for performing the utility split and expanding shared-provider connections | Compare with existing guidance Skills and merge if a highly similar entry exists |
 | **Executable Skill candidate** | None. This run did not reveal a new repeatable check requiring a new script | Do not create a new executable Skill or Tool |
 
-### 7.2 Deduplicated update and merge
+### 6.2 Deduplicated update and merge
 
 1. **Add the Episode:** write **Episode:** `ep-51` as a new task record and add its metadata to the Episode index. Episodes are not merged because each one preserves evidence from a distinct execution trajectory.
 2. **Generate the Pattern candidate:** the LLM removes ArchStudio-specific component and port names from the distilled knowledge and generates a generalized Pattern candidate containing the reusable structural rule, its example, and the behavior to avoid.
 3. **Find the most similar Pattern:** the LLM compares the candidate with existing Pattern identifiers, applicability scopes, and distilled rules. It identifies **Pattern:** `backend-split-decomposition-topology` as the closest entry because both describe decomposing one shared component into specialized components and rewiring callers and shared providers.
 4. **Merge the Pattern:** the LLM updates **Pattern:** `backend-split-decomposition-topology` instead of creating a duplicate Pattern. It adds **Pattern variant:** `Variant D: utility split`, incorporates the new distilled rule, example, and anti-pattern, retains the associated Skill identifier, and increases the Pattern's effective reuse count. **Pattern variant:** `Variant D: utility split` is a named case inside the existing Pattern, not a separate Pattern or Skill.
-5. **Merge the Skill:** extend **Skill (guidance):** `reusableskill-connector-rules` with the utility-split procedure instead of creating another guidance Skill. The merged procedure explains how to allocate callers, create independent connector paths, expand shared providers, and name the new ports.
-6. **Locate the associated Skill:** read the Skill identifier retained by the merged Pattern and use it to locate **Skill (guidance):** `reusableskill-connector-rules` directly.
+5. **Locate the associated Skill:** read the Skill identifier retained by the merged Pattern and use it to locate **Skill (guidance):** `reusableskill-connector-rules` directly.
+6. **Merge the Skill:** extend **Skill (guidance):** `reusableskill-connector-rules` with the utility-split procedure instead of creating another guidance Skill. The merged procedure explains how to allocate callers, create independent connector paths, expand shared providers, and name the new ports.
 7. **Update the indexes:** record the new Episode, the increased Pattern reuse count, and the updated Pattern-to-Skill linkage. No new executable Skill or Tool entry was added.
 
-### 7.3 Distill and Update: new knowledge learned from this run
+### 6.3 Distill and Update: new knowledge learned from this run
 
 - **Pattern merged:** `backend-split-decomposition-topology`.
 - **Pattern variant added during the merge:** `Variant D: utility split`.
