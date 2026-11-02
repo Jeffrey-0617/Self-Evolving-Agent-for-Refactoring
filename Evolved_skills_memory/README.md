@@ -1,6 +1,6 @@
 # Evolved Skills & Memory
 
-This folder contains the knowledge the agent accumulates across refactoring tasks. The agent starts with no memory and a fixed set of cold-start skills. As it completes tasks, it writes new skills, tools, and memory entries here.
+This folder contains the knowledge the agent accumulates across modification tasks. The agent starts with no memory and a fixed set of cold-start skills. As it completes tasks, it writes new skills, tools, and memory entries here.
 
 ```
 Evolved_skills_memory/

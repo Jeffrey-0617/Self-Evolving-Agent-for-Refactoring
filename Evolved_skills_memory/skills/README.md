@@ -48,7 +48,7 @@ These are pure knowledge rules — design guidelines, assertion-writing rules, o
 
 **Example: [`reusableskill-connector-rules`](reusableskill-connector-rules/SKILL.md)**
 
-Reusable design rules for Wright# connectors and multi-role port attachments. No tool is invoked — the skill provides rules the agent applies when designing or refactoring connector structures.
+Reusable design rules for Wright# connectors and multi-role port attachments. No tool is invoked — the skill provides rules the agent applies when designing or modifying connector structures.
 
 Key rule example (Rule 2 — multi-role attachment ordering):
 

@@ -1,4 +1,4 @@
-This trace shows a design refactoring that finished with a VALID result after the agent retrieved and applied knowledge distilled from earlier runs on other systems.
+This trace shows a design modification that finished with a VALID result after the agent retrieved and applied knowledge distilled from earlier runs on other systems.
 
 ## 1. New requirement
 
@@ -14,7 +14,7 @@ The complete index fields used for retrieval were:
 
 | Index | Fields |
 |---|---|
-| Pattern index | Pattern identifier, applicability scope, effective reuse count across successful refactoring trajectories, and associated Skill identifier |
+| Pattern index | Pattern identifier, applicability scope, effective reuse count across successful modification trajectories, and associated Skill identifier |
 | Episode index | Episode identifier, task description, Skill identifiers used in the Episode, Pattern identifiers extracted from or applied in the Episode, and final outcome |
 | Skill index | Skill identifier, Skill description, applicability scope, and associated Pattern identifier |
 
@@ -27,7 +27,7 @@ The retrieval flow is guided by **Retrieval Skill:** `retrieval`:
 5. Combine the directly matched Patterns and Episode-linked Patterns into the relevant Pattern set for the task.
 6. After the relevant Patterns have been identified, use their associated Skill identifiers to locate candidates in the Skill index. Select Skills whose descriptions and applicability scopes match the current task. Skill selection therefore follows and is coordinated with Pattern and Episode retrieval rather than being an independent first-stage search.
 7. When a selected Skill is tool-backed, load the previously generated Tool registered by that Skill. The Tool is surfaced through the selected Skill and is not an additional index field.
-8. Open only the selected Pattern, supporting Episode, candidate Skill, and linked Tool files, and inject this compact knowledge set into the refactoring stage. If no Pattern or Episode metadata matches, return **“No relevant memories found — proceeding fresh.”**
+8. Open only the selected Pattern, supporting Episode, candidate Skill, and linked Tool files, and inject this compact knowledge set into the modification stage. If no Pattern or Episode metadata matches, return **“No relevant memories found — proceeding fresh.”**
 
 #### 2.1.1 An illustrative example of the retrieval flow (Partial metadata presented for readabilities)
 
@@ -39,9 +39,9 @@ For the ArchStudio decomposition task, the LLM used the requirement, the named c
 
 | Episode identifier | Task description | Skill identifiers used | Pattern identifiers recorded | Final outcome |
 |---|---|---|---|---|
-| `ep-17` | Split `ShopBackend` into `OpsBackend` and `AnalyticsBackend`, with `AnalyticsDB`, in the Eshop ADL | `refactoring-workflow`; `reusableskill-connector-rules`; `reusableskill-assertion-design`; `check-assertion-events`; `check-port-name-uniqueness`; `check-adl-no-asserts` | `backend-split-decomposition-topology`; `port-isolation-for-dual-input-roles`; `psconnector-fanout-multi-role-topology`; `until-assertion-csp-anti-pattern`; `adl-file-no-assert-statements`; `assertion-event-name-mismatch`; `duplicate-port-name-across-components` | `VALID (attempt 1/4)` |
-| `ep-1` | Integrate payment-fraud screening with `FraudGateway`, `RiskDecision`, and `FraudFeedback` into the Eshop ADL | `refactoring-workflow`; `reusableskill-connector-rules`; `reusableskill-assertion-design` | `until-assertion-csp-anti-pattern`; `assertion-event-name-mismatch`; `port-isolation-for-dual-input-roles` | `VALID (attempt 3/4)` |
-| `ep-48` — unrelated | Replace the NaCl/Ppapi plugin system with WebAssembly in the Chromium ADL | `refactoring-workflow`; `reusableskill-connector-rules`; `reusableskill-assertion-design`; `reusableskill-verification-diagnostics`; `wrighthash-tool-apply` | `plugin-retirement-bridge-middleman-topology`; `port-isolation-for-dual-input-roles`; `api-gateway-frontend-migration-topology`; `adl-file-no-assert-statements`; `until-assertion-csp-anti-pattern`; `verifier-connection-error-as-invalid` | `VALID (attempt 1/4)` |
+| `ep-17` | Split `ShopBackend` into `OpsBackend` and `AnalyticsBackend`, with `AnalyticsDB`, in the Eshop ADL | `modification-workflow`; `reusableskill-connector-rules`; `reusableskill-assertion-design`; `check-assertion-events`; `check-port-name-uniqueness`; `check-adl-no-asserts` | `backend-split-decomposition-topology`; `port-isolation-for-dual-input-roles`; `psconnector-fanout-multi-role-topology`; `until-assertion-csp-anti-pattern`; `adl-file-no-assert-statements`; `assertion-event-name-mismatch`; `duplicate-port-name-across-components` | `VALID (attempt 1/4)` |
+| `ep-1` | Integrate payment-fraud screening with `FraudGateway`, `RiskDecision`, and `FraudFeedback` into the Eshop ADL | `modification-workflow`; `reusableskill-connector-rules`; `reusableskill-assertion-design` | `until-assertion-csp-anti-pattern`; `assertion-event-name-mismatch`; `port-isolation-for-dual-input-roles` | `VALID (attempt 3/4)` |
+| `ep-48` — unrelated | Replace the NaCl/Ppapi plugin system with WebAssembly in the Chromium ADL | `modification-workflow`; `reusableskill-connector-rules`; `reusableskill-assertion-design`; `reusableskill-verification-diagnostics`; `wrighthash-tool-apply` | `plugin-retirement-bridge-middleman-topology`; `port-isolation-for-dual-input-roles`; `api-gateway-frontend-migration-topology`; `adl-file-no-assert-statements`; `until-assertion-csp-anti-pattern`; `verifier-connection-error-as-invalid` | `VALID (attempt 1/4)` |
 | `...` | `...` | `...` | `...` | `...` |
 
 **Pattern-index metadata read**
@@ -77,7 +77,7 @@ The Eshop example followed the retrieval flow as follows:
 4. **Combined Pattern result:** `backend-split-decomposition-topology`, `port-isolation-for-dual-input-roles`, `psconnector-fanout-multi-role-topology`, `until-assertion-csp-anti-pattern`, `assertion-event-name-mismatch`, `duplicate-port-name-across-components`, and `adl-file-no-assert-statements`.
 5. **Skill result selected from those Patterns:** `reusableskill-connector-rules`, `reusableskill-assertion-design`, `check-assertion-events`, `check-port-name-uniqueness`, and `check-adl-no-asserts`.
 6. **Previously generated Tool result exposed by the tool-backed Skills:** `check_assertion_events`, `check_port_name_uniqueness`, and `check_adl_no_asserts`.
-7. The selected Episodes, Patterns, Skills, and Tools formed the compact knowledge set supplied to the ArchStudio refactoring stage; the entire memory and skill stores were not injected.
+7. The selected Episodes, Patterns, Skills, and Tools formed the compact knowledge set supplied to the ArchStudio modification stage; the entire memory and skill stores were not injected.
 
 ### 2.2 Resulting Retrieved artifacts
 
@@ -285,12 +285,12 @@ After generating the refactored design, the agent applied the previously generat
 
 ## 5. Final design and properties
 
-### 5.1 Partial topology before and after refactoring
+### 5.1 Partial topology before and after modification
 
-The partial topologies before and after refactoring are displayed below. `...` represents additional components and connections that are not shown.
+The partial topologies before and after modification are displayed below. `...` represents additional components and connections that are not shown.
 
 ```text
-BEFORE REFACTORING
+BEFORE MODIFICATION
 
 PreferencesADT
       |
@@ -312,7 +312,7 @@ Resources
      ...
 
 
-AFTER REFACTORING
+AFTER MODIFICATION
 
                               PreferencesADT
                                     |
@@ -360,7 +360,7 @@ Final outcome: VALID
 
 ### 6.1 LLM-based distillation from the raw trajectory
 
-After the refactoring and verification loop terminated, the agent performed LLM-based distillation of the raw execution trajectory based on **Post-reflectionkill (workflow):**.
+After the modification and verification loop terminated, the agent performed LLM-based distillation of the raw execution trajectory based on **Post-reflectionkill (workflow):**.
 
 1. **Read the raw trajectory:** load the requirement, retrieved Patterns, selected Skills, supporting Episodes, candidate designs, tool results, verification records, final design, and intermediate reasoning.
 2. **Distill the Episode:** organize the task-level execution evidence into a concise Episode while removing intermediate reasoning that is not useful to later runs.

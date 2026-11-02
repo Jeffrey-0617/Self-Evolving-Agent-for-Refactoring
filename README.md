@@ -1,4 +1,4 @@
-# Self-Evolving Agent for Software Architecture Refactoring
+# Self-Evolving Agent for Software Architecture Modification
 
 This repository implements a self-evolving LLM agent that refactors software architecture designs based on natural-language functional requirements. The agent is **self-evolving**: it starts with a fixed set of cold-start skills and no memory, and accumulates reusable knowledge across tasks.
 
@@ -11,7 +11,7 @@ The agent starts with a set of cold-start skills in [`.claude/skills/`](.claude/
 
 | Skill | Purpose |
 |---|---|
-| `refactoring-workflow` | Defines the Essential workflow of the agents: generate assertions, refacor designs, verify, repair |
+| `modification-workflow` | Defines the Essential workflow of the agents: generate assertions, refacor designs, verify, repair |
 | `retrieval` | Retrieve relevant memory before starting a task |
 | `post-reflection` | After a task, distill the run log into reusable memory entries and update skills |
 | `wrighthash-tool-apply` | Apply static analysis tools|
@@ -29,7 +29,7 @@ As the agent completes tasks, it writes new evolved skills, tools, and memory. T
 
 ## Running the Tool
 
-`run_clustered_requirements_batch_claude.py` runs a batch of refactoring tasks from an Excel workbook.
+`run_clustered_requirements_batch_claude.py` runs a batch of modification tasks from an Excel workbook.
 
 ### Environment setup
 
