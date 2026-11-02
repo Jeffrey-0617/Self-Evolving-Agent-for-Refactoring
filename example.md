@@ -66,7 +66,7 @@ For the ArchStudio decomposition task, the LLM used the requirement, the named c
 | `reusableskill-assertion-design` | Reusable rules for Wright# temporal-logic assertions, event-name validation, recurring-cycle semantics, and unsupported assertion forms | assertion design | `until-assertion-csp-anti-pattern`; `assertion-event-name-mismatch`; `conditional-absence-assertion-unsupported`; `one-shot-multihop-liveness-invalid` |
 | `check-assertion-events` | Check that every assertion event reference exists in the corresponding Component port declaration | assertion authoring | `assertion-event-name-mismatch` |
 | `check-port-name-uniqueness` | Check that every port name is globally unique across all Components | port naming | `duplicate-port-name-across-components` |
-| `check-adl-no-asserts` | Check that the refactored ADL contains no embedded assertion statements | verification workflow | `adl-file-no-assert-statements` |
+| `check-adl-no-asserts` | Check that the modified ADL contains no embedded assertion statements | verification workflow | `adl-file-no-assert-statements` |
 | `...` | `...` | `...` | `...` |
 
 The Eshop example followed the retrieval flow as follows:
@@ -125,7 +125,7 @@ The Eshop example followed the retrieval flow as follows:
     - **Skill (tool-backed):** `check-adl-no-asserts`
     - **Tool (previously generated):** `check_adl_no_asserts`
 
-## 3. Refactor based on past experience in the ArchStudio design
+## 3. Modify based on past experience in the ArchStudio design
 Only relevant structural summaries or partial specifications are displayed in the following content where needed.
 
 ### 3.1 caller allocation
@@ -278,8 +278,8 @@ All names in these two diagrams are components, and the arrows represent connect
 
 ## 4. Apply Tool-based skills for static analysis before formal verification
 
-After generating the refactored design, the agent applied the previously generated Tool-based skills. Each Tool was used through its linked tool-backed Skill before formal verification. 
-- **Skill (tool-backed):** `check-adl-no-asserts` used **Tool:** `check_adl_no_asserts` to verify that the refactored ADL contained no embedded assertions: PASS.
+After generating the modified design, the agent applied the previously generated Tool-based skills. Each Tool was used through its linked tool-backed Skill before formal verification.
+- **Skill (tool-backed):** `check-adl-no-asserts` used **Tool:** `check_adl_no_asserts` to verify that the modified ADL contained no embedded assertions: PASS.
 - **Skill (tool-backed):** `check-port-name-uniqueness` used **Tool:** `check_port_name_uniqueness` to verify global port-name uniqueness: PASS.
 - **Skill (tool-backed):** `check-assertion-events` used **Tool:** `check_assertion_events` to verify every assertion event reference against its component port declaration: PASS.
 
@@ -338,7 +338,7 @@ AFTER MODIFICATION
 
 ### 5.2 Properties (partial: complete EditorUtils design shown for readability)
 
-**Only the `EditorUtils` part of the refactored system is displayed for readability.**
+**Only the `EditorUtils` part of the modified system is displayed for readability.**
 
 ```wright
 assert archstudio |= [] (EditorManager.manager_util_call.mgr_util_called -> <> EditorUtils.editorutils_srv_em.eu_em_served);

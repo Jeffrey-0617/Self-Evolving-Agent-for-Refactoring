@@ -1,6 +1,6 @@
 # Self-Evolving Agent for Software Architecture Modification
 
-This repository implements a self-evolving LLM agent that refactors software architecture designs based on natural-language functional requirements. The agent is **self-evolving**: it starts with a fixed set of cold-start skills and no memory, and accumulates reusable knowledge across tasks.
+This repository implements a self-evolving LLM agent that modifies software architecture designs based on natural-language functional requirements. The agent is **self-evolving**: it starts with a fixed set of cold-start skills and no memory, and accumulates reusable knowledge across tasks.
 
 ---
 
@@ -11,7 +11,7 @@ The agent starts with a set of cold-start skills in [`.claude/skills/`](.claude/
 
 | Skill | Purpose |
 |---|---|
-| `modification-workflow` | Defines the Essential workflow of the agents: generate assertions, refacor designs, verify, repair |
+| `modification-workflow` | Defines the Essential workflow of the agents: generate assertions, modify designs, verify, repair |
 | `retrieval` | Retrieve relevant memory before starting a task |
 | `post-reflection` | After a task, distill the run log into reusable memory entries and update skills |
 | `wrighthash-tool-apply` | Apply static analysis tools|
@@ -87,4 +87,4 @@ Results are written incrementally to an Excel workbook (sheet: `summary`).
 | `VerificationLoopCount` | Number of verification + repair rounds used |
 | `ExecutionTimeSeconds` | Wall-clock time for the instance |
 | `CostUSD` | API cost reported by Claude Code CLI |
-| `FinalADL` | Final refactored Wright# ADL |
+| `FinalADL` | Final modified Wright# ADL |
